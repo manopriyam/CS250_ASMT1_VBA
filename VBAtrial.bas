@@ -8,7 +8,7 @@ globalVar = 10
 MsgBox "This is global code. The value of globalVar is: " & globalVar
 
 ' More global code
-globalVar = globalVar * 2
+globalVar = globalVar * -2
 MsgBox "Now, the value of globalVar is: " & globalVar
 
 ' Event procedure for a button click

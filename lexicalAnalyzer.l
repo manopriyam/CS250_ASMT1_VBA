@@ -8,7 +8,7 @@
 '.*?\n { printf("\nCOMMENT: %s", yytext); }
 "+"|"-"|"*"|"/"|"Mod"|"^"|"="|"<>"|"<="|">="|"<"|">"|"Is"|"Like"|"&"|"And"|"Eqv"|"Imp"|"Not"|"Or"|"Xor" { printf("\nOPERATOR: %s", yytext); }
 [a-zA-Z][a-zA-Z0-9_]* { printf("\nIDENTIFIER: %s", yytext); }
-[0-9]*|\".*?\"|[0-9]*"."[0-9]* { printf("\nCONSTANT: %s", yytext); }
+[+-]?[0-9]*|\".*?\"|[+-]?[0-9]*[.][0-9]* { printf("\nCONSTANT: %s", yytext); }
 [\n\t ] { printf(" "); }
 
 

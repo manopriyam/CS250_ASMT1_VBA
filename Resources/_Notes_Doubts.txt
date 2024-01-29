@@ -1,0 +1,10 @@
+NOTES **********
+lex lexicalAnalyzer.l; gcc lex.yy.c; ./a.out VBAtrial.bas
+
+TO DO **********
+
+
+DOUBTS **********
+1. Statements and Keywords
+2. Data Types Individual tokens or not
+3.

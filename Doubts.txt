@@ -1,3 +1,0 @@
-1. Statements and Keywords
-2. Data Types Individual tokens or not
-3.
