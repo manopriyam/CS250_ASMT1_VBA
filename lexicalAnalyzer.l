@@ -7,9 +7,11 @@
 
 '.*?\n { printf("\nCOMMENT: %s", yytext); }
 "+"|"-"|"*"|"/"|"Mod"|"^"|"="|"<>"|"<="|">="|"<"|">"|"Is"|"Like"|"&"|"And"|"Eqv"|"Imp"|"Not"|"Or"|"Xor" { printf("\nOPERATOR: %s", yytext); }
+[a-zA-Z]+\(.*\) { printf("\nFUNCTION: %s", yytext); }
 [a-zA-Z][a-zA-Z0-9_]* { printf("\nIDENTIFIER: %s", yytext); }
 [+-]?[0-9]*|\".*?\"|[+-]?[0-9]*[.][0-9]* { printf("\nCONSTANT: %s", yytext); }
 [\n\t ] { printf(" "); }
+
 
 
 %%
@@ -31,7 +33,7 @@ void main (int argc, char** argv) {
         printf("ERROR : Could NOT Open the file.\n");
         return;
     }
-
+    
     yyin=file;
     yylex();
     printf("\n");
