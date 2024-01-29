@@ -1,0 +1,29 @@
+vbCalGreg	Calendar constants
+vbCalHijri	Calendar constants
+
+CallType constants
+vbMethod
+vbGet
+vbLet 	
+vbSet
+
+Color constants
+vbBlack 	
+vbRed 	
+vbGreen 	
+vbYellow 	
+vbBlue 	
+vbMagenta 
+vbCyan 
+vbWhite 
+
+Comparison constants	
+vbUseCompareOption
+vbBinaryCompare
+vbTextCompare
+vbDatabaseCompare
+
+
+
+
+
