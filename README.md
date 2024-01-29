@@ -4,8 +4,6 @@ CS251 Introduction to Language Processing
 <br>
 2023-24-W Semester
 <br>
-Group Name : Double-Slash
-<br>
 Group Members : <br>
 - Manopriya Mondal <br>
 - Shivangi Gaur <br>
@@ -17,7 +15,14 @@ Used : <br>
 
 
 Note : <br>
+1. Lexical Analysis
 Install lex (lexical analyzer) -
 ```
 sudo apt-get install flex
+```
+Run lex file 
+```
+lex lexicalAnalyzer.l
+gcc lex.yy.c
+./a.out input_file
 ```
