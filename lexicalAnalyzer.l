@@ -17,7 +17,8 @@ vb[a-zA-Z]+ { printf("\nCONSTANT: %s", yytext); }
 
 "If"|"Then"|"Else"|"ElseIf"|"EndIf"|"SelectCase"|"EndSelect"|"Case"|"CaseElse"|"For"|"To"|"Step"|"Next"|"ExitFor"|"Do"|"Loop"|"While"|"Until"|"ExitDo"|"ForEach"|"Wend"|"With"|"EndWith" { printf("\nCONTROL_FLOW:%s",yytext); }
 
-Const|Color|Dim|Enum|Public|Private|Static|ReDim|Preserve|ByVal|ByRef|Optional|ParamArray|End|EndIf|EndSelect|EndSub|EndFunction|EndProperty|EndWith|EndEnum|EndType|EndIf|EndSelect|EndSub|EndFunction|EndProperty|EndWith|EndEnum|EndType|Sub|Function|Font|Property|End|Exit|ExitSub|ExitFunction|ExitProperty|ExitSub|ExitFunction|ExitProperty { printf("\nKEYWORD: %s", yytext); }
+
+"Const"|"Color"|"Dim"|"Enum"|"Public"|"Private"|"Static"|"ReDim"|"Preserve"|"ByVal"|"ByRef"|"Optional"|"ParamArray"|"End"|"EndIf"|"EndSelect"|"EndSub"|"EndFunction"|"EndProperty"|"EndWith"|"EndEnum"|"EndType"|"Sub"|"Function"|"Font"|"Property"|"Exit"|"ExitSub"|"ExitFunction"|"ExitProperty" { printf("\nKEYWORD: %s", yytext); }
 
 "^"|"*"|"/"|"\\"|"Mod"|"+"|"-"|"&" { printf("\nARITHMETIC_OPERATOR: %s", yytext); }
 "="|"<>"|"<="|">="|"<"|">"|"Is"|"Like" { printf("\nCOMPARISON_OPERATOR: %s", yytext); }
