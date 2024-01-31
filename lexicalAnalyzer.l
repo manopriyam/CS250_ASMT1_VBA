@@ -22,7 +22,7 @@ Const|Dim|Enum|Public|Private|Static|ReDim|Preserve|ByVal|ByRef|Optional|ParamAr
 If|Then|Else|ElseIf|EndIf|Select|Case|EndSelect|For|To|Step|Next|Do|Loop|While { printf("\nCONTROL-FLOW: %s", yytext); }
 
 [a-zA-Z][a-zA-Z0-9_]* { printf("\nIDENTIFIER: %s", yytext); }
-[+-]?[0-9]*|[+-]?[0-9]*[.][0-9]* { printf("\nCONSTANT: %s", yytext); }
+[+-]?[0-9]*|[+-]?[0-9]*[.][0-9]* { printf("\nNUMBER: %s", yytext); }
 "("|")"|"{"|"}"|"["|"]"|"<"|">" { printf("\nPARENTHESIS: %s", yytext); }
 
 [\n\t ] { printf(" "); }
