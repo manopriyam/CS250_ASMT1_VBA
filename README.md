@@ -1,9 +1,10 @@
 # CS251_ASMT1_VBA
 
-CS251 Introduction to Language Processing 
+CS251 Introduction to Language Processing <br>
+2023-24-W Semester <br>
+
 <br>
-2023-24-W Semester
-<br>
+
 Group Members : <br>
 - Manopriya Mondal <br>
 - Shivangi Gaur <br>
@@ -13,6 +14,7 @@ Group Members : <br>
 Used : <br>
 - LEX (Lexical Analyzer) <br>
 
+<br>
 
 Note : <br>
 1. Lexical Analysis <br>
@@ -41,6 +43,7 @@ gcc lex.yy.c
 ./a.out VBAtrial5.bas
 ```
 
+<br>
 <br>
 
 References Used : <br>

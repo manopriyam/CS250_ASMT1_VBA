@@ -14,40 +14,38 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 
 "Boolean"|"Byte"|"Collection"|"Currency"|"Date"|"Decimal"|"Dictionary"|"Double"|"Integer"|"Long"|"LongLong"|"LongPtr"|"Object"|"Single"|"String"|"Variant" { printf("\nDATA_TYPE: %s", yytext); }
 
-"End If"        { printf("END_IF_T\n"); }
-"Else If"       { printf("ELSE_IF_T\n"); }
-"If"            { printf("IF_T\n"); }
-"Then"          { printf("THEN_T\n"); }
-"Else"          { printf("ELSE_T\n"); }
-"Select Case"   { printf("SELECT_CASE_T\n"); }
-"End Select"    { printf("END_SELECT_T\n"); }
-"Case Else"     { printf("CASE_ELSE_T\n"); }
-"Case"          { printf("CASE_T\n"); }
-"Exit For"      { printf("EXIT_FOR_T\n"); }
-"For Each"      { printf("FOR_EACH_T\n"); }
-"For"           { printf("FOR_T\n"); }
-"To"            { printf("TO_T\n"); }
-"Step"          { printf("STEP_T\n"); }
-"Next"          { printf("NEXT_T\n"); }
-"Exit Do"       { printf("EXIT_DO_T\n"); }
-"Do"            { printf("DO_T\n"); }
-"Loop"          { printf("LOOP_T\n"); }
-"While"         { printf("WHILE_T\n"); }
-"Until"         { printf("UNTIL_T\n"); }
-"Wend"          { printf("WEND_T\n"); }
-"End With"      { printf("END_WITH_T\n"); }
-"With"          { printf("WITH_T\n"); }
-"On Error"      { printf("ON_ERROR_T\n"); }
-"On"            { printf("ON_T\n"); }
-"GoTo"          { printf("GOTO_T\n"); }
-"GoSub"         { printf("GO_SUB_T\n"); }
-"Return"        { printf("RETURN_T\n"); }
+"End If"        { printf("\nT_END_IF: %s", yytext); }
+"Else If"       { printf("\nT_ELSE_IF: %s", yytext); }
+"If"            { printf("\nT_IF: %s", yytext); }
+"Then"          { printf("\nT_THEN: %s", yytext); }
+"Else"          { printf("\nT_ELSE: %s", yytext); }
+"Select Case"   { printf("\nT_SELECT_CASE: %s", yytext); }
+"End Select"    { printf("\nT_END_SELECT: %s", yytext); }
+"Case Else"     { printf("\nT_CASE_ELSE: %s", yytext); }
+"Case"          { printf("\nT_CASE: %s", yytext); }
+"Exit For"      { printf("\nT_EXIT_FOR: %s", yytext); }
+"For Each"      { printf("\nT_FOR_EACH: %s", yytext); }
+"For"           { printf("\nT_FOR: %s", yytext); }
+"To"            { printf("\nT_TO: %s", yytext); }
+"Step"          { printf("\nT_STEP: %s", yytext); }
+"Next"          { printf("\nT_NEXT: %s", yytext); }
+"Exit Do"       { printf("\nT_EXIT_DO: %s", yytext); }
+"Do"            { printf("\nT_DO: %s", yytext); }
+"Loop"          { printf("\nT_LOOP: %s", yytext); }
+"While"         { printf("\nT_WHILE: %s", yytext); }
+"Until"         { printf("\nT_UNTIL: %s", yytext); }
+"Wend"          { printf("\nT_WEND: %s", yytext); }
+"End With"      { printf("\nT_END_WITH: %s", yytext); }
+"With"          { printf("\nT_WITH: %s", yytext); }
+"On Error"      { printf("\nT_ON_ERROR: %s", yytext); }
+"On"            { printf("\nT_ON: %s", yytext); }
+"GoTo"          { printf("\nT_GOTO: %s", yytext); }
+"GoSub"         { printf("\nT_GO_SUB: %s", yytext); }
+"Return"        { printf("\nT_RETURN: %s", yytext); }
 
 "As"|"AppActivate"|"Beep"|"Call"|"ChDir"|"ChDrive"|"Close"|"Const"|"Declare"|"DeleteSetting"|"Dim"|"Erase"|"Error"|"Event"|"FileCopy"|"Function"|"Implements"|"Kill"|"Let"|"Load"|"Unload"|"Lock"|"Unlock"|"LSet"|"MkDir"|"Name"|"Open"|"Line Input #"|"Input #"|"Option Base"|"Option Compare"|"Option Private"|"Option Private Module"|"Option Explicit"|"Property Get"|"Property Let"|"Property Set"|"Print #"|"Private"|"Public"|"Put"|"RaiseEvent"|"Randomize"|"ReDim"|"Reset"|"Resume"|"RmDir"|"RSet"|"SaveSetting"|"Seek"|"SendKeys"|"Set"|"SetAttr"|"Static"|"Stop"|"Sub"|"Time"|"Type"|"Width #"|"Write #"|"Enum"|"End"|"Exit"|"ByVal"|"ByRef"|"New" { printf("\nKEYWORD: %s", yytext); }
 
-"^"|"*"|"/"|"\\"|"Mod"|"+"|"-"|"&"                 { printf("\nARITHMETIC_OPERATOR: %s", yytext); }
-"="|"<>"|"<="|">="|"<"|">"|"Is"|"Like"             { printf("\nCOMPARISON_OPERATOR: %s", yytext); }
-"Not"|"And"|"Or"|"Xor"|"Eqv"|"Imp"                 { printf("\nLOGICAL_OPERATOR: %s", yytext); }
+"^"|"*"|"/"|"\\"|"Mod"|"+"|"-"|"&"|"="|"<>"|"<="|">="|"<"|">"|"Is"|"Like"|"Not"|"And"|"Or"|"Xor"|"Eqv"|"Imp" { printf("\nLOGICAL_OPERATOR: %s", yytext); }
 
 [+-]?[0-9]+                                        { printf("\nNUMERIC_LITERAL: %s", yytext); }
 [+-]?[0-9]*[.][0-9]+|[+-]?[0-9]+[.][0-9]*          { printf("\nFLOAT_LITERAL: %s", yytext); }
