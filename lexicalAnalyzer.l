@@ -45,7 +45,7 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 
 "As"|"AppActivate"|"Beep"|"Call"|"ChDir"|"ChDrive"|"Close"|"Const"|"Declare"|"DeleteSetting"|"Dim"|"Erase"|"Error"|"Event"|"FileCopy"|"Function"|"Implements"|"Kill"|"Let"|"Load"|"Unload"|"Lock"|"Unlock"|"LSet"|"MkDir"|"Name"|"Open"|"Line Input #"|"Input #"|"Option Base"|"Option Compare"|"Option Private"|"Option Private Module"|"Option Explicit"|"Property Get"|"Property Let"|"Property Set"|"Print #"|"Private"|"Public"|"Put"|"RaiseEvent"|"Randomize"|"ReDim"|"Reset"|"Resume"|"RmDir"|"RSet"|"SaveSetting"|"Seek"|"SendKeys"|"Set"|"SetAttr"|"Static"|"Stop"|"Sub"|"Time"|"Type"|"Width #"|"Write #"|"Enum"|"End"|"Exit"|"ByVal"|"ByRef"|"New" { printf("\nKEYWORD: %s", yytext); }
 
-"^"|"*"|"/"|"\\"|"Mod"|"+"|"-"|"&"|"="|"<>"|"<="|">="|"<"|">"|"Is"|"Like"|"Not"|"And"|"Or"|"Xor"|"Eqv"|"Imp" { printf("\nLOGICAL_OPERATOR: %s", yytext); }
+"^"|"*"|"/"|"\\"|"Mod"|"+"|"-"|"&"|"="|"<>"|"<="|">="|"<"|">"|"Is"|"Like"|"Not"|"And"|"Or"|"Xor"|"Eqv"|"Imp" { printf("\nOPERATOR: %s", yytext); }
 
 [+-]?[0-9]+                                        { printf("\nNUMERIC_LITERAL: %s", yytext); }
 [+-]?[0-9]*[.][0-9]+|[+-]?[0-9]+[.][0-9]*          { printf("\nFLOAT_LITERAL: %s", yytext); }
