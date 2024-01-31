@@ -55,10 +55,10 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 "^"|"*"|"/"|"\\"|"Mod"|"+"|"-"|"&"|"="|"<>"|"<="|">="|"<"|">"|"Is"|"Like"|"Not"|"And"|"Or"|"Xor"|"Eqv"|"Imp" { printf("\nOPERATOR: %s", yytext); }
 
     /* REGEX for NUMERIC LITERAL */
-[+-]?[0-9]+                                        { printf("\nNUMERIC_LITERAL: %s", yytext); }
+[+-]?[0-9]+[.]|[+-]?[0-9]+                         { printf("\nNUMERIC_LITERAL: %s", yytext); }
 
     /* REGEX for FLOAT LITERAL */
-[+-]?[0-9]*[.][0-9]+|[+-]?[0-9]+[.][0-9]*          { printf("\nFLOAT_LITERAL: %s", yytext); }
+[+-]?[0-9]*[.][0-9]+                          	   { printf("\nFLOAT_LITERAL: %s", yytext); }
 
     /* REGEX for IDENTIFIERS */
 [a-zA-Z][a-zA-Z0-9_]*                              { printf("\nIDENTIFIER: %s", yytext); }
