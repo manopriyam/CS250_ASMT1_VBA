@@ -1,0 +1,3 @@
+
+
+Const|Dim|Enum|Public|Private|Static|ReDim|Preserve|ByVal|ByRef|Optional|ParamArray|End|EndIf|EndSelect|EndSub|EndFunction|EndProperty|EndWith|EndEnum|EndType|EndIf|EndSelect|EndSub|EndFunction|EndProperty|EndWith|EndEnum|EndType|Sub|Function|Property|End|Exit|ExitSub|ExitFunction|ExitProperty|ExitSub|ExitFunction|ExitProperty { printf("\nKEYWORD: %s", yytext); }
