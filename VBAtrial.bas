@@ -24,3 +24,10 @@ Function CalculateSquareRoot(NumberArg As Double) As Double
         CalculateSquareRoot = Sqr(NumberArg) ' Return square root. 
     End If 
 End Function
+
+Sub temp()
+
+Range("C2").InteriornColor = vbBlack
+Range("C2").Font.Color = vbGreen
+
+End Sub
