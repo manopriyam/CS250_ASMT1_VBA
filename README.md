@@ -46,11 +46,10 @@ gcc lex.yy.c
 ./a.out VBAtrial4.bas
 ./a.out VBAtrial5.bas
 ```
-- The lexical analyser uses the following tokens in the follwing
-We have tokenized into following tokens:
+- We have tokenized the input character stream into following tokens:
 1. Comment: COMMENT	
 2. String Literal: STRING_LITERAL
-3. Objects: OBJECTS_TYPE
+3. Objects: OBJECT_TYPE
 4. Data Types: DATA_TYPE
 5. Control Flow Statements: T_word for each of the following accordingly <br>
     End If, Else If, If, Then, Else, Select Case, End Select, Case Else, Case, Exit For, For Each, For, To, Step, Next, Exit Do, Do, Loop, While, Until, Wend, End With, With, On Error, On, GoTo
