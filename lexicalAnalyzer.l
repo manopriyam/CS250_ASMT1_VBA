@@ -38,28 +38,29 @@ vb[a-zA-Z]+ { printf("\nCONSTANT: %s", yytext); }
 %%
 
 
-int yywrap() {
-	return 1;
+int yywrap() {	//function used in Lex to indicate end of input
+	return 1;	//return 1 as lexical analysis is finished on provided input
 }
 
 void main (int argc, char** argv) 
 {
-    FILE *file;
-    file = fopen(argv[1], "r");
+    FILE *file; 	
+    file = fopen(argv[1], "r");	//open the file given as argument
 
-    if (argc<2) {
+    if (argc<2) {	//in case of no file given as argument throw error
         printf("ERROR : Insufficient Arguments. Missing file name.\n");
         return;
     }
 
-    if (!file) {
+    if (!file) {	//error for invalid file 
         printf("ERROR : Could NOT Open the file.\n");
         return;
     }
     
-    yyin=file;
-    yylex();
+    yyin=file;	//Make file content input for lexical analysis, i.e, sets input file as file
+    yylex();	//Function for calling lexical analyzer
     printf("\n");
-    return;
+    return;	//return from main function
+    
 }
 
