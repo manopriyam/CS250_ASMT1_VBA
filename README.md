@@ -11,10 +11,10 @@ Group Members : <br>
 
 <br>
 
-Github Link : [https://github.com/manopriyam/CS250_ASMT1_VBA](https://github.com/manopriyam/CS250_ASMT1_VBA) <br>
+Github Link : [https://github.com/manopriyam/CS251_ASMT1_VBA](https://github.com/manopriyam/CS251_ASMT1_VBA) <br>
 You may clone the repository using -
 ```
-git clone https://github.com/manopriyam/CS250_ASMT1_VBA
+git clone https://github.com/manopriyam/CS251_ASMT1_VBA
 ```
 
 <br>
