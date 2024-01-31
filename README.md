@@ -11,6 +11,10 @@ Group Members : <br>
 
 <br>
 
+Github Link : [https://github.com/manopriyam/CS250_ASMT1_VBA](https://github.com/manopriyam/CS250_ASMT1_VBA) <br>
+
+<br>
+
 Used : <br>
 - LEX (Lexical Analyzer) <br>
 
@@ -43,7 +47,7 @@ gcc lex.yy.c
 ./a.out VBAtrial5.bas
 ```
 - The lexical analyser uses the following tokens in the follwing
-We have tokenized input characters and strings into following tokens:
+We have tokenized into following tokens:
 1. Comment: COMMENT	
 2. String Literal: STRING_LITERAL
 3. Objects: OBJECTS_TYPE
