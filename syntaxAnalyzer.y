@@ -43,15 +43,14 @@ statement : declaration {
         printf("\nCase : Printing");
     }
 
-
 declaration : KEYWORD IDENTIFIER KEYWORD DATATYPE {    
         if (!strcmp($1, "Dim") && !strcmp($3, "As")) printf("\nDeclaration");
         else yyerror("\nSyntax error");
     }
 
-
 initialisation : IDENTIFIER OPERATOR value {
         if (strcmp($2, "=")==0) printf("\nInitialisation");
+        else yyerror("\nSyntax error");
     }
 
 value : IDENTIFIER 
@@ -76,7 +75,6 @@ printing : KEYWORD STRING_LITERAL {
         if (!strcmp($1, "MsgBox")) printf("\nPrinting");
         else yyerror("\nSyntax error");
     }
-
 
 
 %%
