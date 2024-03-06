@@ -17,7 +17,7 @@
 
 %token <strval> COMMENT STRING_LITERAL OBJECT DATATYPE
 %token <strval> T_END_IF T_ELSE_IF T_IF T_THEN T_ELSE T_SELECT_CASE T_END_SELECT T_CASE_ELSE T_CASE T_EXIT_FOR T_FOR_EACH T_FOR T_TO T_STEP T_NEXT T_EXIT_DO T_DO T_LOOP T_WHILE T_UNTIL T_WEND T_END_WITH T_WITH T_ON_ERROR T_ON T_GOTO T_GO_SUB T_RETURN
-%token <strval> KEYWORD OPERATOR LOGICAL_OPERATOR
+%token <strval> KEYWORD OPERATOR 
 %token <numval> NUMERIC_LITERAL 
 %token <fltval> FLOAT_LITERAL 
 %token <strval> IDENTIFIER PARENTHESIS SEPARATOR
@@ -27,29 +27,20 @@
 %% 
 
 statements : statement {
-    printf("\nSingle Statement");
-}
-| statements statement  {
-    printf("\nMultiple Statements");
-}
+        printf("\nSingle Statement");
+    }
+    | statements statement {
+        printf("\nMultiple Statements");
+    }
 
 statement : declaration {
         printf("\nCase : Declaration");
     } 
-    | initialisation {
-        printf("\nCase : Initialisation");
+    | assignment {
+        printf("\nCase : Assignment");
     }
     | printing {
         printf("\nCase : Printing");
-    }
-    |for {
-    	printf("\nCase : for loop");
-    }
-    | ifStatement {
-    	printf("\nCase : if-else-then");
-    }
-    | COMMENT {
-        printf("\nCase : Commenting");
     }
 
 declaration : KEYWORD IDENTIFIER KEYWORD DATATYPE {    
@@ -57,24 +48,9 @@ declaration : KEYWORD IDENTIFIER KEYWORD DATATYPE {
         else yyerror("\nSyntax error");
     }
 
-initialisation : IDENTIFIER OPERATOR value | IDENTIFIER OPERATOR expression {
-        if (strcmp($2, "=")==0) printf("\nInitialisation");
+assignment : IDENTIFIER OPERATOR value {
+        if (strcmp($2, "=")==0) printf("\nAssignment");
         else yyerror("\nSyntax error");
-    }
-
- //assignment : IDENTIFIER OPERATOR expression {
-   //     if (strcmp($2, "=")==0) printf("\nassignment");
-     //   else yyerror("\nSyntax error");
-    //}
-
- expression : expression op expression | value {
-		printf("\nExpression");
-		}
-		
- op: OPERATOR {
-        //if (strcmp($1, "+")==0 | strcmp($1, "-")==0 | strcmp($1, "*")==0 | strcmp($1, "/")==0) 
-        	printf("\narithmetic operator");
-        //else yyerror("\nSyntax error");
     }
 
 value : IDENTIFIER 
@@ -82,13 +58,16 @@ value : IDENTIFIER
     | NUMERIC_LITERAL 
     | FLOAT_LITERAL
 
-printvalues : OPERATOR value printvalues {
-        if (!strcmp($1, "&")) printf("\nPrinting Multiple");
+and : OPERATOR {
+        if (!strcmp($1, "&")) printf("\nAnd Operator");
         else yyerror("\nSyntax error");
     }
-    | OPERATOR value {
-        if (!strcmp($1, "&")) printf("\nPrinting Single");
-        else yyerror("\nSyntax error");
+
+printvalues : and value printvalues {
+        printf("\nPrinting Multiple");
+    }
+    | and value {
+        printf("\nPrinting Single");
     }
 
 printing : KEYWORD STRING_LITERAL {
@@ -99,22 +78,6 @@ printing : KEYWORD STRING_LITERAL {
         if (!strcmp($1, "MsgBox")) printf("\nPrinting");
         else yyerror("\nSyntax error");
     }
-
-for : T_FOR initialisation T_TO NUMERIC_LITERAL statements T_NEXT IDENTIFIER {
-    printf("\nFor loop");
-	}
-	
-ifStatement : if T_END_IF | if else T_END_IF | if elseif T_END_IF | if elseif else T_END_IF;
-
-if : T_IF condition T_THEN statements;
-
-elseif : T_ELSE_IF condition T_THEN statements; 
-
-else : T_ELSE statements;
-
-condition : expression LOGICAL_OPERATOR expression | value {
-		printf("\nCondition");
-		}
 
 
 %%
