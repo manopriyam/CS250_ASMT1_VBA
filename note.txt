@@ -1,0 +1,11 @@
+onlylexicalAnalyzer.l can be run to check which lexemes are given which tokens to check for errors
+
+VBAtrial7.bas and VBAtrial8.bas added
+
+Need to add grammar for 
+- expression
+- Private Public etc
+- Loops 
+- Conditional Statements
+
+Modify README
