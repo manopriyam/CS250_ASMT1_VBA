@@ -49,8 +49,20 @@ statement : declaration {
     | printing {
         printf("\nCase : Printing");
     }
+    | subblock {
+        printf("\nCase : Sub Block");
+    }
+    | functionblock {
+        printf("\nCase : Function Block");
+    }
 
-declaration : T_DIM IDENTIFIER T_AS DATATYPE {    
+vartype : T_AS DATATYPE 
+    | /* empty */
+
+declare : IDENTIFIER vartype
+    | declare ',' IDENTIFIER vartype
+
+declaration : T_DIM declare {    
         printf("\nDeclaration");
     }
 
@@ -75,6 +87,14 @@ printing : T_MSG_BOX STRING_LITERAL {
     }
     | T_MSG_BOX STRING_LITERAL printvalues {
         printf("\nPrinting Variables Also");
+    }
+
+subblock : T_SUB IDENTIFIER '(' declare ')' statements T_END T_SUB {
+        printf("\nSub Block Statements");
+    }
+    
+functionblock : T_FUNCTION IDENTIFIER '(' declare ')' vartype statements T_END T_FUNCTION {
+        printf("\nFunction Block Statements");
     }
 
 
