@@ -9,6 +9,7 @@
     extern char* yytext;
 %}
 
+
 %union {
     int numval;
     char* strval;
@@ -29,9 +30,14 @@
 %token <fltval> FLOAT_LITERAL 
 %token <strval> IDENTIFIER PARENTHESIS SEPARATOR
 
+%left T_MULTIPLY T_DIVIDE T_BACKSLASH T_MOD T_PLUS T_MINUS T_CONCATENATE T_EQUAL T_NOT_EQUAL T_LESS_EQUAL T_GREATER_EQUAL T_LESS_THAN T_GREATER_THAN T_IS T_LIKE T_NOT T_AND T_OR T_XOR T_EQV T_IMP
+
+%right T_POWER  
+
 
 /* Rule Section */
 %% 
+
 
 statements : statement {
         printf("\nSingle Statement");
@@ -45,7 +51,7 @@ statement : declaration {
     } 
     | assignment {
         printf("\nCase : Assignment");
-    }
+    } 
     | printing {
         printf("\nCase : Printing");
     }
@@ -55,18 +61,21 @@ statement : declaration {
     | functionblock {
         printf("\nCase : Function Block");
     }
+    | forloop {        
+        printf("\nCase : For Loop");
+    }
 
 vartype : T_AS DATATYPE 
     | /* empty */
 
 declare : IDENTIFIER vartype
-    | declare ',' IDENTIFIER vartype
+    | declare ',' IDENTIFIER vartype 
 
 declaration : T_DIM declare {    
         printf("\nDeclaration");
     }
 
-assignment : IDENTIFIER T_EQUAL value { 
+assignment : IDENTIFIER T_EQUAL expression { 
         printf("\nAssignment");
     } 
 
@@ -74,6 +83,76 @@ value : IDENTIFIER
     | STRING_LITERAL 
     | NUMERIC_LITERAL 
     | FLOAT_LITERAL
+
+expression : expression T_PLUS expression {
+        printf("\nAddition");
+    }
+    | expression T_MINUS expression {
+        printf("\nSubtraction");
+    }
+    | expression T_MULTIPLY expression {
+        printf("\nMultiplication");
+    }
+    | expression T_DIVIDE expression {
+        printf("\nDivision");
+    }
+    | expression T_BACKSLASH expression {
+        printf("\nBackslash Division");
+    }
+    | expression T_MOD expression {
+        printf("\nModulo");
+    }
+    | expression T_POWER expression {
+        printf("\nExponentiation");
+    }
+    | expression T_CONCATENATE expression {
+        printf("\nConcatenation");
+    }
+    | expression T_EQUAL expression {
+        printf("\nEqual");
+    }
+    | expression T_NOT_EQUAL expression {
+        printf("\nNot Equal");
+    }
+    | expression T_LESS_EQUAL expression {
+        printf("\nLess Than or Equal");
+    }
+    | expression T_GREATER_EQUAL expression {
+        printf("\nGreater Than or Equal");
+    }
+    | expression T_LESS_THAN expression {
+        printf("\nLess Than");
+    }
+    | expression T_GREATER_THAN expression {
+        printf("\nGreater Than");
+    }
+    | expression T_IS expression {
+        printf("\nIs");
+    }
+    | expression T_LIKE expression {
+        printf("\nLike");
+    }
+    | expression T_NOT expression {
+        printf("\nNot");
+    }
+    | expression T_AND expression {
+        printf("\nAnd");
+    }
+    | expression T_OR expression {
+        printf("\nOr");
+    }
+    | expression T_XOR expression {
+        printf("\nXor");
+    }
+    | expression T_EQV expression {
+        printf("\nEquivalence");
+    }
+    | expression T_IMP expression {
+        printf("\nImplication");
+    }
+    | value {
+        printf("\nValue");
+    }
 
 printvalues : T_CONCATENATE value printvalues {
         printf("\nPrinting Multiple");
@@ -97,6 +176,17 @@ functionblock : T_FUNCTION IDENTIFIER '(' declare ')' vartype statements T_END T
         printf("\nFunction Block Statements");
     }
 
+forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER {
+        printf("\nFor loop");
+	}
+
+numbers : IDENTIFIER
+    | NUMERIC_LITERAL
+    | FLOAT_LITERAL
+
+stepping : T_STEP numbers 
+    | /* empty */
+
 
 %%
 
@@ -116,16 +206,23 @@ void main (int argc, char** argv) {
         return;
     }
     
-    yyin=file;  // Make file content input for lexical analysis, i.e, sets input file as file
+    int ch = fgetc(file); // check if empty file
+    if (ch == EOF) { // error for invalid file 
+        return;
+    }
+    fclose(file);
     
+    file = fopen(argv[1], "r"); // open the file given as argument
+    yyin=file;  // Make file content input for lexical analysis, i.e, sets input file as file
     yyparse(); // function to call parser
 
     if (flag==0) printf("\n\nValid\n\n"); 
     else printf("\n\nInvalid\n\n");
+    return;
 } 
   
   
 void yyerror(char *s) { 
-   printf("\n\nSyntax Error : %s at line %d >> %s\n\n", s, yylineno, yytext); 
+   printf("\n\nSyntax Error : Line %d >> %s\n\n", yylineno, yytext); 
    flag=1; 
 } 
