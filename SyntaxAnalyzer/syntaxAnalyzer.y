@@ -64,6 +64,15 @@ statement : declaration {
     | forloop {        
         printf("\nCase : For Loop");
     }
+    | whileloop {        
+        printf("\nCase : While Loop");
+    }
+    | doWhileloop {        
+        printf("\nCase : Do While Loop");
+    }
+    | COMMENT {
+        printf("\nCase : Comment");
+    }
 
 vartype : T_AS DATATYPE 
     | /* empty */
@@ -168,11 +177,14 @@ printing : T_MSG_BOX STRING_LITERAL {
         printf("\nPrinting Variables Also");
     }
 
-subblock : T_SUB IDENTIFIER '(' declare ')' statements T_END T_SUB {
+paramdeclare : declare 
+    | /* empty */
+
+subblock : T_SUB IDENTIFIER '(' paramdeclare ')' statements T_END T_SUB {
         printf("\nSub Block Statements");
     }
     
-functionblock : T_FUNCTION IDENTIFIER '(' declare ')' vartype statements T_END T_FUNCTION {
+functionblock : T_FUNCTION IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_FUNCTION {
         printf("\nFunction Block Statements");
     }
 
@@ -187,9 +199,16 @@ numbers : IDENTIFIER
 stepping : T_STEP numbers 
     | /* empty */
 
-for : T_FOR expression T_TO NUMERIC_LITERAL statements T_NEXT IDENTIFIER {
-    printf("\nFor loop");
-	}
+whileloop : T_WHILE expression statements T_WEND {
+    printf("\nWhile loop");
+}
+	
+doWhileloop : T_DO untWh expression statements T_EXIT_DO statements T_LOOP {
+    printf("\nDo While Loop");
+}
+ 
+untWh : T_WHILE 
+    | T_UNTIL 
 
 
 %%
