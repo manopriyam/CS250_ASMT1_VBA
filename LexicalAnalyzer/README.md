@@ -42,7 +42,7 @@ lex lexicalAnalyzer.l
 gcc lex.yy.c
 ./a.out VBAtrial.bas
 ```
-- Individual dummy file execution
+- Individual dummy file execution - 
 ```
 ./a.out VBAtrial1.bas
 ./a.out VBAtrial2.bas

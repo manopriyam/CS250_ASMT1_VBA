@@ -21,6 +21,7 @@ git clone https://github.com/manopriyam/CS251_ASMT1_VBA
 
 Used : <br>
 - LEX (Lexical Analyzer) <br>
+- YACC (Syntax Analyzer) <br>
 
 <br>
 
@@ -40,6 +41,14 @@ Note : <br>
 9. Identifier: IDENTIFIER
 10. *Brackets: PARENTHESIS and tokenised them as their corresponding semantic character
 11. *Separators: SEPARATOR and tokenised them as their corresponding semantic character
+- You may check the corresponding Lexical Analysis done on the lexemes by running the following commands on the input_file -
+```
+lex onlylexicalAnalyzer.l
+gcc lex.yy.c
+./a.out input_file
+```
+
+<br>
 
 2. Syntax Analysis <br>
 - Install yacc (syntax analyzer) -
@@ -56,7 +65,8 @@ gcc lex.yy.c y.tab.c
 - The repository contains a few dummy VBA files which can be executed as follows - 
 ```
 lex lexicalAnalyzer.l
-gcc lex.yy.c
+yacc -d syntaxAnalyzer.y
+gcc lex.yy.c y.tab.c
 ./a.out VBAtrial.bas
 ```
 
