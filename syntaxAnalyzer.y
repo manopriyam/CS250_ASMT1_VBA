@@ -29,6 +29,7 @@
 %token <fltval> FLOAT_LITERAL 
 %token <strval> IDENTIFIER PARENTHESIS SEPARATOR
 
+%left T_POWER T_MULTIPLY T_DIVIDE T_BACKSLASH T_MOD T_PLUS T_MINUS T_CONCATENATE T_EQUAL T_NOT_EQUAL T_LESS_EQUAL T_GREATER_EQUAL T_LESS_THAN T_GREATER_THAN T_IS T_LIKE T_NOT T_AND T_OR T_XOR T_EQV T_IMP
 
 /* Rule Section */
 %% 
@@ -42,9 +43,6 @@ statements : statement {
 
 statement : declaration {
         printf("\nCase : Declaration");
-    } 
-    | assignment {
-        printf("\nCase : Assignment");
     }
     | printing {
         printf("\nCase : Printing");
@@ -54,6 +52,24 @@ statement : declaration {
     }
     | functionblock {
         printf("\nCase : Function Block");
+    }
+    | for {
+    	printf("\nCase : for loop");
+    }
+    | while {
+    	printf("\nCase : While loop");
+    }
+    | doWhile {
+    	printf("\nCase : Do-While loop");
+    }
+    //| ifStatement {
+    	//printf("\nCase : if-else-then");
+    //}
+    | COMMENT {
+        printf("\nCase : Commenting");
+    }
+    | expression {
+        printf("\nCase : Expression");
     }
 
 vartype : T_AS DATATYPE 
@@ -66,9 +82,74 @@ declaration : T_DIM declare {
         printf("\nDeclaration");
     }
 
-assignment : IDENTIFIER T_EQUAL value { 
-        printf("\nAssignment");
-    } 
+//assignment : IDENTIFIER T_EQUAL value { 
+  //      printf("\nAssignment");
+    //} 
+
+expression : expression T_POWER expression {
+                printf("\nExpression (Power)");
+            }
+           | expression T_MULTIPLY expression {
+                printf("\nExpression (Multiply)");
+            }
+           | expression T_DIVIDE expression {
+                printf("\nExpression (Divide)");
+            }
+           | expression T_BACKSLASH expression {
+                printf("\nExpression (Backslash)");
+            }
+           | expression T_MOD expression {
+                printf("\nExpression (Modulus)");
+            }
+           | expression T_PLUS expression {
+                printf("\nExpression (Addition)");
+            }
+           | expression T_MINUS expression {
+                printf("\nExpression (Subtraction)");
+            }
+           | expression T_EQUAL expression {
+                printf("\nExpression (Equal)");
+            }
+           | expression T_NOT_EQUAL expression {
+                printf("\nExpression (Not Equal)");
+            }
+           | expression T_LESS_EQUAL expression {
+                printf("\nExpression (Less Than or Equal)");
+            }
+           | expression T_GREATER_EQUAL expression {
+                printf("\nExpression (Greater Than or Equal)");
+            }
+           | expression T_LESS_THAN expression {
+                printf("\nExpression (Less Than)");
+            }
+           | expression T_GREATER_THAN expression {
+                printf("\nExpression (Greater Than)");
+            }
+           | expression T_IS expression {
+                printf("\nExpression (Is)");
+            }
+           | expression T_LIKE expression {
+                printf("\nExpression (Like)");
+            }
+           | expression T_NOT expression {
+                printf("\nExpression (Not)");
+            }
+           | expression T_AND expression {
+                printf("\nExpression (And)");
+            }
+           | expression T_OR expression {
+                printf("\nExpression (Or)");
+            }
+           | expression T_XOR expression {
+                printf("\nExpression (Xor)");
+            }
+           | expression T_EQV expression {
+                printf("\nExpression (Eqv)");
+            }
+           | expression T_IMP expression {
+                printf("\nExpression (Imp)");
+            }
+           | value ;
 
 value : IDENTIFIER 
     | STRING_LITERAL 
@@ -96,6 +177,39 @@ subblock : T_SUB IDENTIFIER '(' declare ')' statements T_END T_SUB {
 functionblock : T_FUNCTION IDENTIFIER '(' declare ')' vartype statements T_END T_FUNCTION {
         printf("\nFunction Block Statements");
     }
+
+
+for : T_FOR expression T_TO NUMERIC_LITERAL statements T_NEXT IDENTIFIER {
+    printf("\nFor loop");
+	}
+
+ //WhileCondition : T_WHILE expression | T_WHILE 
+
+while : T_WHILE expression statements T_WEND {
+    printf("\nWhile loop");
+	}
+	
+doWhile : T_DO untWh expression statements T_EXIT_DO statements T_LOOP ;
+ //| T_DO statements T_EXIT_DO statements T_LOOP untWh cond_w ;
+
+untWh : T_WHILE | T_UNTIL
+
+
+ //condtion can be NULL as well
+//ifStatement : if elseif else ;
+
+ //x : /* empty */
+ //	| T_END_IF ;
+
+ //something: else | elseif | elseif else ;
+
+//if : T_IF expression T_THEN statements ;
+
+//elseif : T_ELSE_IF expression T_THEN statements | /*empty*/ ; 
+ 
+//else : T_ELSE statements | /*empty*/  ;
+
+
 
 
 %%
