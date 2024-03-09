@@ -18,7 +18,7 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 
     /* REGEX for CONTROL STATEMENTS */
 "End If"        { printf("\nT_END_IF: %s", yytext); }
-"Else If"       { printf("\nT_ELSE_IF: %s", yytext); }
+"ElseIf"       { printf("\nT_ELSE_IF: %s", yytext); }
 "If"            { printf("\nT_IF: %s", yytext); }
 "Then"          { printf("\nT_THEN: %s", yytext); }
 "Else"          { printf("\nT_ELSE: %s", yytext); }

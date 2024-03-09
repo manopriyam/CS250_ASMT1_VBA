@@ -1,7 +1,14 @@
 Need to add grammar for 
 - For Each Loop
-- Do While Loop 2
+https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-for-eachnext-statements
+- Do Loop While 
+https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-doloop-statements
 - Conditional Statements if-elseif-then
+https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-ifthenelse-statements
+- Select Case Statements 
+https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-select-case-statements
+- Property Procedures
+https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/writing-a-property-procedure
 - Private Public Objects etc
 
 

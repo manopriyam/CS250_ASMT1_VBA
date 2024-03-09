@@ -26,7 +26,7 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 
     /* REGEX for CONTROL STATEMENTS */
 "End If"        { printf("\nT_END_IF: %s", yytext); yylval.strval = strdup(yytext); return T_END_IF; }
-"Else If"       { printf("\nT_ELSE_IF: %s", yytext); yylval.strval = strdup(yytext); return T_ELSE_IF; }
+"ElseIf"       { printf("\nT_ELSE_IF: %s", yytext); yylval.strval = strdup(yytext); return T_ELSE_IF; }
 "If"            { printf("\nT_IF: %s", yytext); yylval.strval = strdup(yytext); return T_IF; }
 "Then"          { printf("\nT_THEN: %s", yytext); yylval.strval = strdup(yytext); return T_THEN; }
 "Else"          { printf("\nT_ELSE: %s", yytext); yylval.strval = strdup(yytext); return T_ELSE; }

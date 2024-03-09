@@ -72,6 +72,9 @@ statement : declaration {
     }
     | COMMENT {
         printf("\nCase : Comment");
+    } 
+    | conditional {
+        printf("\nCase : conditional if-elseif-then");
     }
 
 vartype : T_AS DATATYPE 
@@ -209,6 +212,22 @@ doWhileloop : T_DO untWh expression statements T_EXIT_DO statements T_LOOP {
  
 untWh : T_WHILE 
     | T_UNTIL 
+
+conditional : T_IF expression T_THEN statements elseifs elseblock T_END_IF {
+        printf("\nIf Block");
+    } 
+
+elseifs : elseifs elseifblock 
+    | /* empty */
+
+elseifblock : T_ELSE_IF expression T_THEN statements {
+        printf("\nElse-If Block");
+    }
+
+elseblock : T_ELSE statements {
+        printf("\nElse Block");
+    }
+    | /* empty */
 
 
 %%

@@ -29,18 +29,18 @@ Note : <br>
 1. Lexical Analysis <br>
 - Refer to LexicalAnalysis folder
 - CHANGES MADE : We have tokenized the input character stream into following tokens:
-1. Comment: COMMENT	
-2. String Literal: STRING_LITERAL
-3. Objects: OBJECT
-4. Data Types: DATATYPE
-5. *KEYWORDS: T_word for each KEYWORD
-6. *Operators: T_operator for each OPERATOR <br>
-    ^, *, /, \, Mod, +, -, &, =, <>, <=, >=, <, >, Is, Like, Not, And, Or, Xor, Eqv, Imp
-7. Numeric Literal: NUMERIC_LITERAL
-8. Float Literal: FLOAT_LITERAL
-9. Identifier: IDENTIFIER
-10. *Brackets: PARENTHESIS and tokenised them as their corresponding semantic character
-11. *Separators: SEPARATOR and tokenised them as their corresponding semantic character
+    1. Comment: COMMENT	
+    2. String Literal: STRING_LITERAL
+    3. Objects: OBJECT
+    4. Data Types: DATATYPE
+    5. *KEYWORDS: T_word for each KEYWORD
+    6. *Operators: T_operator for each OPERATOR <br>
+        ^, *, /, \, Mod, +, -, &, =, <>, <=, >=, <, >, Is, Like, Not, And, Or, Xor, Eqv, Imp
+    7. Numeric Literal: NUMERIC_LITERAL
+    8. Float Literal: FLOAT_LITERAL
+    9. Identifier: IDENTIFIER
+    10. *Brackets: PARENTHESIS and tokenised them as their corresponding semantic character
+    11. *Separators: SEPARATOR and tokenised them as their corresponding semantic character
 - You may check the corresponding Lexical Analysis done on the lexemes by running the following commands on the input_file -
 ```
 lex onlylexicalAnalyzer.l
