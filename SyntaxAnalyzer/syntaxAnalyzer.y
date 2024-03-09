@@ -85,12 +85,17 @@ statement : declaration {
     | end_exit_statements {
         printf("\nend/exit statements");
     } 
+    | type_statement {
+        printf("\nend/exit statements");
+    }
 
 vartype : T_AS DATATYPE 
+	| T_AS IDENTIFIER
     | /* empty */
 
 declare : IDENTIFIER vartype
     | declare ',' IDENTIFIER vartype 
+    | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype
 
 declaration : T_DIM declare {    
         printf("\nDeclaration");
@@ -104,6 +109,7 @@ value : IDENTIFIER
 numbers : IDENTIFIER
     | NUMERIC_LITERAL
     | FLOAT_LITERAL
+
 
 expression : expression T_PLUS expression {
         printf("\nAddition");
@@ -180,20 +186,25 @@ expression : expression T_PLUS expression {
 
 end_exit_statements : T_EXIT_FOR 
 
-assignment : IDENTIFIER T_EQUAL expression | objectblock T_EQUAL expression { 
+assignment : IDENTIFIER T_EQUAL expression 
+	| objectblock T_EQUAL expression { 
         printf("\nAssignment");
     } 
 
-objectblock : object | obj '.' object
+objectblock : object 
+		| obj '.' object
+		
 object: obj '.' IDENTIFIER
-obj : objvalue '(' valuecomma ')' | objvalue
 
-objvalue : OBJECT | value
+obj : objvalue '(' valuecomma ')' 
+	| objvalue
+
+objvalue : OBJECT 
+	| value
 
 valuecomma : value
            | valuecomma ',' value
            ;
-
 
 printvalues : T_CONCATENATE value printvalues {
         printf("\nPrinting Multiple");
@@ -287,6 +298,22 @@ doWhileloop : T_DO untWh expression statements T_EXIT_DO statements T_LOOP {
  
 untWh : T_WHILE 
     | T_UNTIL 
+
+type_statement : T_TYPE IDENTIFIER type_declaration T_END T_TYPE 
+		| T_TYPE IDENTIFIER COMMENT type_declaration T_END T_TYPE 
+
+type_declaration : type_block 
+		| type_declaration type_block
+
+type_block : type_dec_value T_AS data_type 
+		| type_dec_value T_AS data_type COMMENT 
+
+data_type  : DATATYPE 
+		| DATATYPE T_MULTIPLY expression
+
+type_dec_value : IDENTIFIER 
+		| IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')'
+
 
 
 %%
