@@ -61,8 +61,11 @@ statement : declaration {
     | functionblock {
         printf("\nCase : Function Block");
     }
-    | conditional {
+    | conditionalifelse {
         printf("\nCase : Conditional if-elseif-then");
+    }
+    | conditionalselectcase {        
+        printf("\nCase : Conditional Select Case");
     }
     | forloop {        
         printf("\nCase : For Loop");
@@ -198,7 +201,11 @@ functionblock : T_FUNCTION IDENTIFIER '(' paramdeclare ')' vartype statements T_
         printf("\nFunction Block Statements");
     }
 
-conditional : T_IF expression T_THEN statements elseifs elseblock T_END_IF {
+conditionalifelse : ifblock elseifs elseblock T_END_IF {
+        printf("\nIf-ElseIf-Then Block");
+    } 
+
+ifblock : T_IF expression T_THEN statements {
         printf("\nIf Block");
     } 
 
@@ -213,6 +220,33 @@ elseblock : T_ELSE statements {
         printf("\nElse Block");
     }
     | /* empty */
+
+
+conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT {
+    printf("\nSelect Case");
+}
+
+cases : cases caseblock 
+    | /* empty */
+
+caseblock : T_CASE caseexprs statements
+
+elsecase : T_CASE_ELSE statements
+    | /* empty */
+
+caseexprs : caseexprs ',' caseexpr
+    | caseexpr
+    
+caseexpr : expression 
+    | expression T_TO expression
+    | T_IS compop expression
+
+compop : T_EQUAL 
+    | T_NOT_EQUAL
+    | T_LESS_EQUAL
+    | T_GREATER_EQUAL
+    | T_LESS_THAN
+    | T_GREATER_THAN
 
 forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER {
         printf("\nFor Loop");
