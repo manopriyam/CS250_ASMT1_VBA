@@ -78,6 +78,9 @@ statement : declaration {
     }
     | COMMENT {
         printf("\nCase : Comment");
+    }
+    | end_exit_statements {
+        printf("\nend/exit statements");
     } 
 
 vartype : T_AS DATATYPE 
@@ -94,7 +97,6 @@ value : IDENTIFIER
     | STRING_LITERAL 
     | NUMERIC_LITERAL 
     | FLOAT_LITERAL
-    | objectblock
 
 numbers : IDENTIFIER
     | NUMERIC_LITERAL
@@ -169,6 +171,11 @@ expression : expression T_PLUS expression {
     | value {
         printf("\nValue");
     }
+    | objectblock {
+        printf("\nobject block");
+    }
+
+end_exit_statements : T_EXIT_FOR 
 
 assignment : IDENTIFIER T_EQUAL expression | objectblock T_EQUAL expression { 
         printf("\nAssignment");
@@ -176,7 +183,9 @@ assignment : IDENTIFIER T_EQUAL expression | objectblock T_EQUAL expression {
 
 objectblock : object | obj '.' object
 object: obj '.' IDENTIFIER
-obj : OBJECT '(' valuecomma ')' | OBJECT 
+obj : objvalue '(' valuecomma ')' | objvalue
+
+objvalue : OBJECT | value
 
 valuecomma : value
            | valuecomma ',' value
