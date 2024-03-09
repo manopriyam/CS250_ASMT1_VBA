@@ -1,6 +1,4 @@
 Need to add grammar for 
-- Type Block
-https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/type-statement
 - With Block
 https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/with-statement
 - Property Procedures
@@ -21,22 +19,6 @@ https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/u
 
 
 Saved Snippets ----- ----- ----- ----- ----- ----- 
-
- //WhileCondition : T_WHILE expression | T_WHILE 
-
- //condtion can be NULL as well
-//ifStatement : if elseif else ;
-
- //x : /* empty */
- //	| T_END_IF ;
-
- //something: else | elseif | elseif else ;
-
-//if : T_IF expression T_THEN statements ;
-
-//elseif : T_ELSE_IF expression T_THEN statements | /*empty*/ ; 
- 
-//else : T_ELSE statements | /*empty*/  ;
 
 
 
