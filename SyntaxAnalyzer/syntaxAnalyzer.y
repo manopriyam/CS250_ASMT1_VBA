@@ -239,9 +239,6 @@ elseblock : T_ELSE statements {
         printf("\nElse Block");
     }
     | /* empty */
-    
-
-
 
 conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT {
     printf("\nSelect Case");
@@ -273,20 +270,10 @@ forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER {
         printf("\nFor Loop");
 	}
 
-
-foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements nextblock {
+foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements T_NEXT IDENTIFIER {
         printf("\nFor Each Loop");
 	}
 
-nextblock : T_NEXT nextforeach
-
-nextforeach :  IDENTIFIER  
- //%prec NEXT
-//	| /* empty */ 
-
-
-
-    
 stepping : T_STEP numbers 
     | /* empty */
 
