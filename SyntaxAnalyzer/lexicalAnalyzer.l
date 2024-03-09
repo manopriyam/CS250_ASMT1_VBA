@@ -53,6 +53,7 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 "GoTo"          { printf("\nT_GOTO: %s", yytext); yylval.strval = strdup(yytext); return T_GOTO; }
 "GoSub"         { printf("\nT_GO_SUB: %s", yytext); yylval.strval = strdup(yytext); return T_GO_SUB; }
 "Return"        { printf("\nT_RETURN: %s", yytext); yylval.strval = strdup(yytext); return T_RETURN; }
+"In"            { printf("\nT_IN: %s", yytext); yylval.strval = strdup(yytext); return T_IN; }
 
 
     /* REGEX for OTHER KEYWORDS */

@@ -45,6 +45,7 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 "GoTo"          { printf("\nT_GOTO: %s", yytext); }
 "GoSub"         { printf("\nT_GO_SUB: %s", yytext); }
 "Return"        { printf("\nT_RETURN: %s", yytext); }
+"In"            { printf("\nT_IN: %s", yytext); }
 
 
     /* REGEX for OTHER KEYWORDS */

@@ -1,10 +1,8 @@
 Need to add grammar for 
-- For Each Loop
+- For Each Loop Part 2
 https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-for-eachnext-statements
-- Do Loop While 
+- Do Loop While Part 2
 https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-doloop-statements
-- Conditional Statements if-elseif-then
-https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-ifthenelse-statements
 - Select Case Statements 
 https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-select-case-statements
 - Property Procedures

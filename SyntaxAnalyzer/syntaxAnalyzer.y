@@ -20,7 +20,7 @@
 
 %token <strval> COMMENT STRING_LITERAL OBJECT DATATYPE
 
-%token <strval> T_END_IF T_ELSE_IF T_IF T_THEN T_ELSE T_SELECT_CASE T_END_SELECT T_CASE_ELSE T_CASE T_EXIT_FOR T_FOR_EACH T_FOR T_TO T_STEP T_NEXT T_EXIT_DO T_DO T_LOOP T_WHILE T_UNTIL T_WEND T_END_WITH T_WITH T_ON_ERROR T_ON T_GOTO T_GO_SUB T_RETURN
+%token <strval> T_END_IF T_ELSE_IF T_IF T_THEN T_ELSE T_SELECT_CASE T_END_SELECT T_CASE_ELSE T_CASE T_EXIT_FOR T_FOR_EACH T_FOR T_TO T_STEP T_NEXT T_EXIT_DO T_DO T_LOOP T_WHILE T_UNTIL T_WEND T_END_WITH T_WITH T_ON_ERROR T_ON T_GOTO T_GO_SUB T_RETURN T_IN
 
 %token <strval> T_AS T_APP_ACTIVATE T_BEEP T_CALL T_CHDIR T_CHDRIVE T_CLOSE T_CONST T_DECLARE T_DELETE_SETTING T_DIM T_ERASE T_ERROR T_EVENT T_FILE_COPY T_FUNCTION T_IMPLEMENTS T_KILL T_LET T_LOAD T_UNLOAD T_LOCK T_UNLOCK T_LSET T_MKDIR T_NAME T_OPEN T_LINE_INPUT T_INPUT T_OPTION_BASE T_OPTION_COMPARE T_OPTION_PRIVATE T_OPTION_PRIVATE_MODULE T_OPTION_EXPLICIT T_PROPERTY_GET T_PROPERTY_LET T_PROPERTY_SET T_PRINT T_PRIVATE T_PUBLIC T_PUT T_RAISE_EVENT T_RANDOMIZE T_REDIM T_RESET T_RESUME T_RMDIR T_RSET T_SAVE_SETTING T_SEEK T_SEND_KEYS T_SET T_SET_ATTR T_STATIC T_STOP T_SUB T_TIME T_TYPE T_WIDTH T_WRITE T_ENUM T_END T_EXIT T_BY_VAL T_BY_REF T_NEW T_MSG_BOX 
 
@@ -61,8 +61,14 @@ statement : declaration {
     | functionblock {
         printf("\nCase : Function Block");
     }
+    | conditional {
+        printf("\nCase : Conditional if-elseif-then");
+    }
     | forloop {        
         printf("\nCase : For Loop");
+    }
+    | foreachloop {        
+        printf("\nCase : For Each Loop");
     }
     | whileloop {        
         printf("\nCase : While Loop");
@@ -73,9 +79,6 @@ statement : declaration {
     | COMMENT {
         printf("\nCase : Comment");
     } 
-    | conditional {
-        printf("\nCase : conditional if-elseif-then");
-    }
 
 vartype : T_AS DATATYPE 
     | /* empty */
@@ -87,13 +90,13 @@ declaration : T_DIM declare {
         printf("\nDeclaration");
     }
 
-assignment : IDENTIFIER T_EQUAL expression { 
-        printf("\nAssignment");
-    } 
-
 value : IDENTIFIER 
     | STRING_LITERAL 
     | NUMERIC_LITERAL 
+    | FLOAT_LITERAL
+
+numbers : IDENTIFIER
+    | NUMERIC_LITERAL
     | FLOAT_LITERAL
 
 expression : expression T_PLUS expression {
@@ -166,6 +169,10 @@ expression : expression T_PLUS expression {
         printf("\nValue");
     }
 
+assignment : IDENTIFIER T_EQUAL expression { 
+        printf("\nAssignment");
+    } 
+
 printvalues : T_CONCATENATE value printvalues {
         printf("\nPrinting Multiple");
     }
@@ -191,28 +198,6 @@ functionblock : T_FUNCTION IDENTIFIER '(' paramdeclare ')' vartype statements T_
         printf("\nFunction Block Statements");
     }
 
-forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER {
-        printf("\nFor loop");
-	}
-
-numbers : IDENTIFIER
-    | NUMERIC_LITERAL
-    | FLOAT_LITERAL
-
-stepping : T_STEP numbers 
-    | /* empty */
-
-whileloop : T_WHILE expression statements T_WEND {
-    printf("\nWhile loop");
-}
-	
-doWhileloop : T_DO untWh expression statements T_EXIT_DO statements T_LOOP {
-    printf("\nDo While Loop");
-}
- 
-untWh : T_WHILE 
-    | T_UNTIL 
-
 conditional : T_IF expression T_THEN statements elseifs elseblock T_END_IF {
         printf("\nIf Block");
     } 
@@ -228,6 +213,28 @@ elseblock : T_ELSE statements {
         printf("\nElse Block");
     }
     | /* empty */
+
+forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER {
+        printf("\nFor Loop");
+	}
+
+foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements T_NEXT IDENTIFIER {
+        printf("\nFor Each Loop");
+	}
+    
+stepping : T_STEP numbers 
+    | /* empty */
+
+whileloop : T_WHILE expression statements T_WEND {
+    printf("\nWhile loop");
+}
+	
+doWhileloop : T_DO untWh expression statements T_EXIT_DO statements T_LOOP {
+    printf("\nDo While Loop");
+}
+ 
+untWh : T_WHILE 
+    | T_UNTIL 
 
 
 %%
