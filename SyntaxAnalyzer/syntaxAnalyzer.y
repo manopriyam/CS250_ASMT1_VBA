@@ -33,7 +33,7 @@
 %left T_MULTIPLY T_DIVIDE T_BACKSLASH T_MOD T_PLUS T_MINUS T_CONCATENATE T_EQUAL T_NOT_EQUAL T_LESS_EQUAL T_GREATER_EQUAL T_LESS_THAN T_GREATER_THAN T_IS T_LIKE T_NOT T_AND T_OR T_XOR T_EQV T_IMP
 
 %right T_POWER  
-
+%nonassoc NEXT
 
 /* Rule Section */
 %% 
@@ -94,6 +94,7 @@ value : IDENTIFIER
     | STRING_LITERAL 
     | NUMERIC_LITERAL 
     | FLOAT_LITERAL
+    | objectblock
 
 numbers : IDENTIFIER
     | NUMERIC_LITERAL
@@ -169,9 +170,18 @@ expression : expression T_PLUS expression {
         printf("\nValue");
     }
 
-assignment : IDENTIFIER T_EQUAL expression { 
+assignment : IDENTIFIER T_EQUAL expression | objectblock T_EQUAL expression { 
         printf("\nAssignment");
     } 
+
+objectblock : object | obj '.' object
+object: obj '.' IDENTIFIER
+obj : OBJECT '(' valuecomma ')' | OBJECT 
+
+valuecomma : value
+           | valuecomma ',' value
+           ;
+
 
 printvalues : T_CONCATENATE value printvalues {
         printf("\nPrinting Multiple");
@@ -213,14 +223,26 @@ elseblock : T_ELSE statements {
         printf("\nElse Block");
     }
     | /* empty */
+    
+
 
 forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER {
         printf("\nFor Loop");
 	}
 
-foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements T_NEXT IDENTIFIER {
+
+foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements nextblock {
         printf("\nFor Each Loop");
 	}
+
+nextblock : T_NEXT nextforeach
+
+nextforeach :  IDENTIFIER  
+ //%prec NEXT
+//	| /* empty */ 
+
+
+
     
 stepping : T_STEP numbers 
     | /* empty */
