@@ -10,9 +10,3 @@ https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/u
 - Do Loop While Part 2 
 https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-doloop-statements
 
-
-
-Saved Snippets ----- ----- ----- ----- ----- ----- 
-
-
-
