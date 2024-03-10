@@ -31,9 +31,12 @@
 %token <strval> IDENTIFIER PARENTHESIS SEPARATOR
 
 %left T_MULTIPLY T_DIVIDE T_BACKSLASH T_MOD T_PLUS T_MINUS T_CONCATENATE T_EQUAL T_NOT_EQUAL T_LESS_EQUAL T_GREATER_EQUAL T_LESS_THAN T_GREATER_THAN T_IS T_LIKE T_NOT T_AND T_OR T_XOR T_EQV T_IMP
+%left '_' ':' ';'
 
-%right T_POWER  
+%right T_POWER
+
 %nonassoc NEXT
+
 
 /* Rule Section */
 %% 
@@ -44,6 +47,15 @@ statements : statement {
     }
     | statements statement {
         printf("\nMultiple Statements");
+    }
+    | statements '_' {
+        printf("\nMultiple Statements 2");
+    }
+    | statements ':' {
+        printf("\nMultiple Statements 3");
+    }
+    | statements ';' {
+        printf("\nMultiple Statements 4");
     }
 
 statement : declaration {
@@ -60,6 +72,9 @@ statement : declaration {
     }
     | functionblock {
         printf("\nCase : Function Block");
+    }
+    | typeblock {
+        printf("\nCase: Type Block");
     }
     | conditionalifelse {
         printf("\nCase : Conditional if-elseif-then");
@@ -79,14 +94,11 @@ statement : declaration {
     | doWhileloop {        
         printf("\nCase : Do While Loop");
     }
+    | end_exit_statements {
+        printf("\nCase : End/Exit statements");
+    } 
     | COMMENT {
         printf("\nCase : Comment");
-    }
-    | end_exit_statements {
-        printf("\nend/exit statements");
-    } 
-    | type_statement {
-        printf("\nend/exit statements");
     }
 
 vartype : T_AS DATATYPE 
@@ -109,7 +121,6 @@ value : IDENTIFIER
 numbers : IDENTIFIER
     | NUMERIC_LITERAL
     | FLOAT_LITERAL
-
 
 expression : expression T_PLUS expression {
         printf("\nAddition");
@@ -184,15 +195,11 @@ expression : expression T_PLUS expression {
         printf("\nobject block");
     }
 
-end_exit_statements : T_EXIT_FOR 
-
 assignment : IDENTIFIER T_EQUAL expression 
-	| objectblock T_EQUAL expression { 
-        printf("\nAssignment");
-    } 
+	| objectblock T_EQUAL expression 
 
 objectblock : object 
-		| obj '.' object
+    | obj '.' object
 		
 object: obj '.' IDENTIFIER
 
@@ -203,8 +210,7 @@ objvalue : OBJECT
 	| value
 
 valuecomma : value
-           | valuecomma ',' value
-           ;
+    | valuecomma ',' value
 
 printvalues : T_CONCATENATE value printvalues {
         printf("\nPrinting Multiple");
@@ -230,6 +236,21 @@ subblock : T_SUB IDENTIFIER '(' paramdeclare ')' statements T_END T_SUB {
 functionblock : T_FUNCTION IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_FUNCTION {
         printf("\nFunction Block Statements");
     }
+
+typeblock : T_TYPE IDENTIFIER type_declaration T_END T_TYPE 
+		| T_TYPE IDENTIFIER COMMENT type_declaration T_END T_TYPE 
+
+type_declaration : type_block 
+		| type_declaration type_block
+
+type_block : type_dec_value T_AS data_type 
+		| type_dec_value T_AS data_type COMMENT 
+
+data_type  : DATATYPE 
+		| DATATYPE T_MULTIPLY expression
+
+type_dec_value : IDENTIFIER 
+		| IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')'
 
 conditionalifelse : ifblock elseifs elseblock T_END_IF {
         printf("\nIf-ElseIf-Then Block");
@@ -299,21 +320,8 @@ doWhileloop : T_DO untWh expression statements T_EXIT_DO statements T_LOOP {
 untWh : T_WHILE 
     | T_UNTIL 
 
-type_statement : T_TYPE IDENTIFIER type_declaration T_END T_TYPE 
-		| T_TYPE IDENTIFIER COMMENT type_declaration T_END T_TYPE 
-
-type_declaration : type_block 
-		| type_declaration type_block
-
-type_block : type_dec_value T_AS data_type 
-		| type_dec_value T_AS data_type COMMENT 
-
-data_type  : DATATYPE 
-		| DATATYPE T_MULTIPLY expression
-
-type_dec_value : IDENTIFIER 
-		| IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')'
-
+end_exit_statements : T_EXIT_FOR 
+    | T_EXIT T_FUNCTION
 
 
 %%
