@@ -86,6 +86,7 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 "Property Get"          { printf("\nT_PROPERTY_GET: %s", yytext); }
 "Property Let"          { printf("\nT_PROPERTY_LET: %s", yytext); }
 "Property Set"          { printf("\nT_PROPERTY_SET: %s", yytext); }
+"Property"              { printf("\nT_PROPERTY: %s", yytext); }
 "Print #"               { printf("\nT_PRINT: %s", yytext); }
 "Private"               { printf("\nT_PRIVATE: %s", yytext); }
 "Public"                { printf("\nT_PUBLIC: %s", yytext); }

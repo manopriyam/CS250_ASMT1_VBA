@@ -94,6 +94,7 @@ Application|Workbooks|Worksheets|Range|Cell|Chart|ChartObject|Shape|ShapeRange|T
 "Property Get"          { printf("\nT_PROPERTY_GET: %s", yytext); yylval.strval = strdup(yytext); return T_PROPERTY_GET; }
 "Property Let"          { printf("\nT_PROPERTY_LET: %s", yytext); yylval.strval = strdup(yytext); return T_PROPERTY_LET; }
 "Property Set"          { printf("\nT_PROPERTY_SET: %s", yytext); yylval.strval = strdup(yytext); return T_PROPERTY_SET; }
+"Property"              { printf("\nT_PROPERTY: %s", yytext); yylval.strval = strdup(yytext); return T_PROPERTY; }
 "Print #"               { printf("\nT_PRINT: %s", yytext); yylval.strval = strdup(yytext); return T_PRINT; }
 "Private"               { printf("\nT_PRIVATE: %s", yytext); yylval.strval = strdup(yytext); return T_PRIVATE; }
 "Public"                { printf("\nT_PUBLIC: %s", yytext); yylval.strval = strdup(yytext); return T_PUBLIC; }
