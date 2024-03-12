@@ -25,8 +25,10 @@ Application|Workbooks|Worksheets|Range|Cell|Chart|ChartObject|Shape|ShapeRange|T
 "Boolean"|"Byte"|"Collection"|"Currency"|"Date"|"Decimal"|"Dictionary"|"Double"|"Integer"|"Long"|"LongLong"|"LongPtr"|"Object"|"Single"|"String"|"Variant" { printf("\nDATATYPE: %s", yytext); yylval.strval = strdup(yytext); return DATATYPE; }
 
     /* REGEX for CONTROL STATEMENTS */
+"Do While"      { printf("\nT_DO_WHILE: %s", yytext); yylval.strval = strdup(yytext); return T_DO_WHILE; }
+"Do Until"      { printf("\nT_DO_UNTIL: %s", yytext); yylval.strval = strdup(yytext); return T_DO_UNTIL; }
 "End If"        { printf("\nT_END_IF: %s", yytext); yylval.strval = strdup(yytext); return T_END_IF; }
-"ElseIf"       { printf("\nT_ELSE_IF: %s", yytext); yylval.strval = strdup(yytext); return T_ELSE_IF; }
+"ElseIf"        { printf("\nT_ELSE_IF: %s", yytext); yylval.strval = strdup(yytext); return T_ELSE_IF; }
 "If"            { printf("\nT_IF: %s", yytext); yylval.strval = strdup(yytext); return T_IF; }
 "Then"          { printf("\nT_THEN: %s", yytext); yylval.strval = strdup(yytext); return T_THEN; }
 "Else"          { printf("\nT_ELSE: %s", yytext); yylval.strval = strdup(yytext); return T_ELSE; }

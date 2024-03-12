@@ -7,6 +7,3 @@ https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-h
 - If Conditional Part 2 -> Simple if blocks can work without T_END_IF
 - For Each Loop Part 2 -> Loop T_NEXT can work without IDENTIFIER
 https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-for-eachnext-statements
-- Do Loop While Part 2 
-https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-doloop-statements
-

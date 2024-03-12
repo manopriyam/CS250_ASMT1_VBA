@@ -17,8 +17,10 @@ Application|Workbook|Worksheet|Range|Cell|Chart|ChartObject|Shape|ShapeRange|Tex
 "Boolean"|"Byte"|"Collection"|"Currency"|"Date"|"Decimal"|"Dictionary"|"Double"|"Integer"|"Long"|"LongLong"|"LongPtr"|"Object"|"Single"|"String"|"Variant" { printf("\nDATATYPE: %s", yytext); }
 
     /* REGEX for CONTROL STATEMENTS */
+"Do While"      { printf("\nT_DO_WHILE: %s", yytext); }
+"Do Until"      { printf("\nT_DO_UNTIL: %s", yytext); }
 "End If"        { printf("\nT_END_IF: %s", yytext); }
-"ElseIf"       { printf("\nT_ELSE_IF: %s", yytext); }
+"ElseIf"        { printf("\nT_ELSE_IF: %s", yytext); }
 "If"            { printf("\nT_IF: %s", yytext); }
 "Then"          { printf("\nT_THEN: %s", yytext); }
 "Else"          { printf("\nT_ELSE: %s", yytext); }

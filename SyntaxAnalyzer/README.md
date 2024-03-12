@@ -41,6 +41,7 @@ Note : <br>
     9. Identifier: IDENTIFIER
     10. *Brackets: PARENTHESIS and tokenised them as their corresponding semantic character
     11. *Separators: SEPARATOR and tokenised them as their corresponding semantic character
+    - tokens with changes made denoted by asterisk (*)
 - You may check the corresponding Lexical Analysis done on the lexemes by running the following commands on the input_file -
 ```
 lex onlylexicalAnalyzer.l
