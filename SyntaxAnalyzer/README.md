@@ -76,27 +76,15 @@ gcc lex.yy.c y.tab.c
         ```
         result = {2 + [3 * (4 - 1)]} / [5 + {5 * (2 - 1)}]
         ```
-        - Instead of -
-        ```
-        result = (2+(3*(4-1)))/(5+(5*(2-1)))
-        ```
     - Expressions : only first brackets '(' and ')' are used, if any. <br>
         - Assumed Syntax -
         ```
         result = {2 + [3 * (4 - 1)]} / [5 + {5 * (2 - 1)}]
         ```
-        - Instead of -
-        ```
-        result = (2 + (3 * (4 - 1))) / (5 + (5 * (2 - 1)))
-        ```
     - Conditional Statements : always have an 'End If' KEYWORD <br>
         - Assumed Syntax -
         ```
         If performance = 1 Then Bonus = salary * 0.1 End If 
-        ```
-        - Instead of -
-        ```
-        If performance = 1 Then Bonus = salary * 0.1  
         ```
     - For Loop : always has identifier specified after 'Next' KEYWORD <br>
         - Assumed Syntax -
@@ -106,13 +94,6 @@ gcc lex.yy.c y.tab.c
             z = 1 
         Next i
         ```
-        - Instead of -
-        ```
-        For i = 1 To 5 Step 5   
-            Dim x As Integer
-            z = 1 
-        Next 
-        ```
     - With Block : always has the object properties explicitly specified <br>
         - Assumed Syntax -
         ```
@@ -120,13 +101,36 @@ gcc lex.yy.c y.tab.c
             MyLabel.Height = 2000 
         End With
         ```
-        - Instead of -
-        ```
-        With MyLabel 
-            .Height = 2000 
-        End With
-        ```
-
+- Statements and Blocks Considered :
+    - Statements Considered -
+        1. Declarations
+        2. Re-Declarations
+        3. Assignment
+        4. Printing
+        5. Exit Statements
+        6. Private/Public Declarations
+        7. Comment
+    - Blocks Considered -
+        1. Sub Procedure
+        2. Function Procedure
+        3. Property Get Procedure
+        4. Property Set Procedure
+        5. Property Let Procedure
+        6. Type Procedure
+        7. With Procedure
+        8. Conditional If-ElseIf-Then
+        9. Conditional Select-Case
+        10. For Loop
+        11. For Each Loop
+        12. While Loop
+        13. Do While Loop
+        14. Do Until Loop
+        15. Private/Public Sub Procedure
+        16. Private/Public Function Procedure
+        17. Private/Public Property Get Procedure
+        18. Private/Public Property Set Procedure
+        19. Private/Public Property Let Procedure
+        
 <br>
 <br>
 

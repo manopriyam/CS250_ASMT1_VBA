@@ -57,27 +57,32 @@ statements : statement
     | statements ':'
     | statements ';'
 
-statement : declaration
-    | redeclaration 
-    | assignment 
-    | printing 
-    | subblock 
-    | functionblock
-    | propertygetblock 
-    | propertysetblock 
-    | propertyletblock 
-    | typeblock 
-    | withblock 
-    | conditionalifelse
-    | conditionalselectcase
-    | forloop 
-    | foreachloop
-    | whileloop 
-    | doWhileloop
-    | end_exit_statement
-    | pvtpubdeclaration 
-    | pvtpubblock
-    | COMMENT 
+statement : declaration               { printf("\nStatement : Declaration"); }
+    | redeclaration                   { printf("\nStatement : Re-Declaration"); }
+    | assignment                      { printf("\nStatement : Assignment"); }
+    | printing                        { printf("\nStatement : Printing"); }
+    | subblock                        { printf("\nBlock : Sub Procedure"); }
+    | functionblock                   { printf("\nBlock : Function Procedure"); }
+    | propertygetblock                { printf("\nBlock : Property Get Procedure"); }
+    | propertysetblock                { printf("\nBlock : Property Set Procedure"); }
+    | propertyletblock                { printf("\nBlock : Property Let Procedure"); }
+    | typeblock                       { printf("\nBlock : Type Procedure"); }
+    | withblock                       { printf("\nBlock : With Procedure"); }
+    | conditionalifelse               { printf("\nBlock : Conditional If-ElseIf-Then"); }
+    | conditionalselectcase           { printf("\nBlock : Conditional Select-Case"); }
+    | forloop                         { printf("\nBlock : For Loop"); }
+    | foreachloop                     { printf("\nBlock : For Each Loop"); }
+    | whileloop                       { printf("\nBlock : While Loop"); }
+    | doWhileloop                     { printf("\nBlock : Do While Loop"); }
+    | doUntilloop                     { printf("\nBlock : Do Until Loop"); }
+    | exit_statement                  { printf("\nStatement : Exit Statement"); }
+    | pvtpubdeclaration               { printf("\nStatement : Private/Public Declaration"); }
+    | pvtpubsubblock                  { printf("\nBlock : Private/Public Sub Procedure"); }
+    | pvtpubfunctionblock             { printf("\nBlock : Private/Public Function Procedure"); }
+    | pvtpubpropgetblock              { printf("\nBlock : Private/Public Property Get Procedure"); }
+    | pvtpubpropsetblock              { printf("\nBlock : Private/Public Property Set Procedure"); }
+    | pvtpubpropletblock              { printf("\nBlock : Private/Public Property Let Procedure"); }
+    | COMMENT                         { printf("\nStatement : Comment"); }
 
 vartype : T_AS DATATYPE 
 	| T_AS IDENTIFIER
@@ -230,24 +235,31 @@ stepping : T_STEP numbers
 whileloop : T_WHILE expression statements T_WEND 
 	
 doWhileloop : T_DO_WHILE expression statements T_LOOP 
-    | T_DO_UNTIL expression statements T_LOOP 
     | T_DO statements T_LOOP T_WHILE expression 
+
+doUntilloop : T_DO_UNTIL expression statements T_LOOP 
     | T_DO statements T_LOOP T_UNTIL expression 
 
-end_exit_statement : T_EXIT_FOR 
+exit_statement : T_EXIT_FOR
+    | T_EXIT_DO 
+    | T_EXIT T_SUB
     | T_EXIT T_FUNCTION
-    | T_EXIT_DO
+    | T_EXIT T_PROPERTY
 
 pvtpub : T_PRIVATE 
     | T_PUBLIC
 
 pvtpubdeclaration : pvtpub declare
 
-pvtpubblock : pvtpub subblock 
-    | pvtpub functionblock
-    | pvtpub propertygetblock
-    | pvtpub propertyletblock
-    | pvtpub propertysetblock
+pvtpubsubblock : pvtpub subblock 
+
+pvtpubfunctionblock : pvtpub functionblock
+
+pvtpubpropgetblock : pvtpub propertygetblock
+
+pvtpubpropletblock : pvtpub propertyletblock
+
+pvtpubpropsetblock : pvtpub propertysetblock
 
 
 %%
