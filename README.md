@@ -21,7 +21,7 @@ git clone https://github.com/manopriyam/CS251_ASMT1_VBA
 
 Used : <br>
 - LEX (Lexical Analyzer) <br>
-- YACC (Syntax Analyser) <br>
+- YACC (Syntax Analyzer) <br>
 
 <br>
 
