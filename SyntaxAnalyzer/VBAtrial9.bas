@@ -1,16 +1,8 @@
-Do While Counter < 20 ' Inner Loop
-    Counter = Counter + 1 ' Increment Counter.
-        Exit Do ' Exit inner loop.
-Loop
+For i = 1 To 5 Step 5   
+    Dim x As Integer
+    z = 1 
+Next i
 
-Do ' Outer loop.
-    Do While Counter < 20 ' Inner Loop
-        Counter = Counter + 1 ' Increment Counter.
-    Loop
-    Total = Total + Counter ' Exit Do Lands here.
-    Counter = 0
-Loop Until Check = False 
-
-While Counter < 20 ' Test value of Counter. 
-    Counter = Counter + 1 ' Increment Counter. 
-Wend ' End While loop when Counter > 19. 
+For Each I In TestArray 
+    k = I 
+Next I

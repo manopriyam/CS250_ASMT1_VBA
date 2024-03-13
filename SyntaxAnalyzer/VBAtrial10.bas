@@ -1,18 +1,13 @@
-If performance = 1 Then 
-    Bonus = salary * 0.1 
-    If performance = 1 Then 
-    Bonus = salary * 0.1 
-    ElseIf performance = 2 Then 
-        Bonus = salary * 0.09 
-    Else    
-        Bonus = 0 
-    End If 
-ElseIf performance = 2 Then 
-    Bonus = salary * 0.09 
-ElseIf performance = 3 Then 
-    Bonus = salary * 0.07 
-Else    
-    Bonus = 0 
-End If 
+While Counter < 20 ' Test value of Counter. 
+    Counter = Counter + 1 ' Increment Counter. 
+Wend ' End While loop when Counter > 19. 
 
-If x Then y End If
+Do While Counter < 20 ' Inner Loop
+    Counter = Counter + 1 ' Increment Counter.
+        Exit Do ' Exit inner loop.
+Loop
+
+Do ' Outer loop.
+    Total = Total + Counter ' Exit Do Lands here.
+    Counter = 0
+Loop Until Check = False 

@@ -221,7 +221,7 @@ assignment : IDENTIFIER T_EQUAL expression
     | T_SET assignment
     | T_LET assignment
 
-objectblock : object
+objectblock : object 
 
 object : object '.' obj 
     | obj
@@ -231,6 +231,8 @@ object : object '.' obj
 obj : IDENTIFIER '(' valuecomma ')' 
     | OBJECT_BLOCK '(' valuecomma ')'
     | OBJECT_BLOCK
+    | OBJECT '(' valuecomma ')'
+    | OBJECT
 
 valuecomma : value
     | valuecomma ',' value

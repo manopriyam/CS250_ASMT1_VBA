@@ -31,7 +31,7 @@ Note : <br>
 - CHANGES MADE : We have tokenized the input character stream into following tokens:
     1. Comment: COMMENT	
     2. String Literal: STRING_LITERAL
-    3. Objects: OBJECT
+    3. *Objects: OBJECT and OBJECT_BLOCK
     4. Data Types: DATATYPE
     5. *KEYWORDS: T_word for each KEYWORD
     6. *Operators: T_operator for each OPERATOR <br>
@@ -71,7 +71,7 @@ gcc lex.yy.c y.tab.c
 ./a.out VBAtrial.bas
 ```
 - We have taken a few assumptions :
-    - Conditional Statements : always have an 'End If' Keyword 
+    - Conditional Statements : always have an 'End If' Keyword <br>
     Assumed Syntax -
     ```
     If performance = 1 Then Bonus = salary * 0.1 End If 
@@ -80,7 +80,7 @@ gcc lex.yy.c y.tab.c
     ```
     If performance = 1 Then Bonus = salary * 0.1  
     ```
-    - For Loop : always has identifier specified after 'Next' Keyword 
+    - For Loop : always has identifier specified after 'Next' Keyword <br>
     Assumed Syntax -
     ```
     For i = 1 To 5 Step 5   
@@ -95,7 +95,7 @@ gcc lex.yy.c y.tab.c
         z = 1 
     Next 
     ```
-    - With Block : always has the object properties explicitly specified
+    - With Block : always has the object properties explicitly specified <br>
     Assumed Syntax -
     ```
     With MyLabel 
@@ -108,6 +108,7 @@ gcc lex.yy.c y.tab.c
         .Height = 2000 
     End With
     ```
+
 <br>
 <br>
 
