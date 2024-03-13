@@ -23,6 +23,7 @@ Application|Workbooks|Worksheets|Range|Cell|Chart|ChartObject|Shape|ShapeRange|T
 
     /* REGEX for DATA TYPES */
 "Boolean"|"Byte"|"Collection"|"Currency"|"Date"|"Decimal"|"Dictionary"|"Double"|"Integer"|"Long"|"LongLong"|"LongPtr"|"Object"|"Single"|"String"|"Variant" { printf("\nDATATYPE: %s", yytext); yylval.strval = strdup(yytext); return DATATYPE; }
+([a-zA-Z][a-zA-Z0-9_]*)+([.]([a-zA-Z][a-zA-Z0-9_]*)+)+ { printf("\nOBJECT_BLOCK: %s", yytext); yylval.strval = strdup(yytext); return OBJECT_BLOCK; }
 
     /* REGEX for CONTROL STATEMENTS */
 "Do While"      { printf("\nT_DO_WHILE: %s", yytext); yylval.strval = strdup(yytext); return T_DO_WHILE; }

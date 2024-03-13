@@ -18,7 +18,7 @@
 
 %start statements
 
-%token <strval> COMMENT STRING_LITERAL OBJECT DATATYPE
+%token <strval> COMMENT STRING_LITERAL OBJECT OBJECT_BLOCK DATATYPE
 
 %token <strval> T_DO_WHILE T_DO_UNTIL T_END_IF T_ELSE_IF T_IF T_THEN T_ELSE T_SELECT_CASE T_END_SELECT T_CASE_ELSE T_CASE T_EXIT_FOR T_FOR_EACH T_FOR T_TO T_STEP T_NEXT T_EXIT_DO T_DO T_LOOP T_WHILE T_UNTIL T_WEND T_END_WITH T_WITH T_ON_ERROR T_ON T_GOTO T_GO_SUB T_RETURN T_IN
 
@@ -42,11 +42,9 @@
 %right T_POWER
 %left T_EQUAL
 
-%left '_' ':' ';'
+%left '_' ':' ';' '.' '(' ')'
 
 %nonassoc NEXT
-
-
 
 
 /* Rule Section */
@@ -95,6 +93,9 @@ statement : declaration {
     }
     | typeblock {
         printf("\nCase: Type Block");
+    }
+    | withblock {
+        printf("\nCase: With Block");
     }
     | conditionalifelse {
         printf("\nCase : Conditional if-elseif-then");
@@ -212,7 +213,7 @@ expression : expression T_PLUS expression {
         printf("\nValue");
     }
     | objectblock {
-        printf("\nobject block");
+        printf("\nObject");
     }
 
 assignment : IDENTIFIER T_EQUAL expression 
@@ -220,16 +221,16 @@ assignment : IDENTIFIER T_EQUAL expression
     | T_SET assignment
     | T_LET assignment
 
-objectblock : object 
-    | obj '.' object
-		
-object: obj '.' IDENTIFIER
+objectblock : object
 
-obj : objvalue '(' valuecomma ')' 
-	| objvalue
+object : object '.' obj 
+    | obj
+    | object '.' IDENTIFIER
+    | IDENTIFIER '.' object 
 
-objvalue : OBJECT 
-	| value
+obj : IDENTIFIER '(' valuecomma ')' 
+    | OBJECT_BLOCK '(' valuecomma ')'
+    | OBJECT_BLOCK
 
 valuecomma : value
     | valuecomma ',' value
@@ -285,6 +286,9 @@ data_type  : DATATYPE
 
 type_dec_value : IDENTIFIER 
     | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')'
+
+withblock : T_WITH IDENTIFIER statements T_END_WITH 
+    | T_WITH objectblock statements T_END_WITH 
 
 conditionalifelse : ifblock elseifs elseblock T_END_IF {
         printf("\nIf-ElseIf-Then Block");
