@@ -74,12 +74,12 @@ gcc lex.yy.c y.tab.c
     - Expressions : There is whitespace between any LITERAL and OPERATOR <br>
         - Assumed Syntax -
         ```
-        result = {2 + [3 * (4 - 1)]} / [5 + {5 * (2 - 1)}]
+        result = (2 + (3 * (4 - 1))) / (5 + (5 * (2 - 1)))
         ```
     - Expressions : only first brackets '(' and ')' are used, if any. <br>
         - Assumed Syntax -
         ```
-        result = {2 + [3 * (4 - 1)]} / [5 + {5 * (2 - 1)}]
+        result = (2 + (3 * (4 - 1))) / (5 + (5 * (2 - 1)))
         ```
     - Conditional Statements : always have an 'End If' KEYWORD <br>
         - Assumed Syntax -
