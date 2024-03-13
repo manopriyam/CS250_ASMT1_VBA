@@ -291,8 +291,8 @@ void main (int argc, char** argv) {
     yyin=file;  // Make file content input for lexical analysis, i.e, sets input file as file
     yyparse(); // function to call parser
 
-    if (flag==0) printf("\n\nValid\n\n"); 
-    else printf("\n\nInvalid\n\n");
+    if (flag==0) printf("\n\nValid Source Code\n\n"); 
+    else printf("\n\nInvalid Source Code\n\n");
     return;
 } 
   
