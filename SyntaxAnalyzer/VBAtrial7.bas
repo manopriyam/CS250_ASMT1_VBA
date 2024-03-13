@@ -1,19 +1,14 @@
-If performance = 1 Then 
-    Bonus = salary * 0.1 
-    If performance = 1 Then 
-    Bonus = salary * 0.1 
-    ElseIf performance = 2 Then 
-        Bonus = salary * 0.09 
-    Else    
-        Bonus = 0 
-    End If 
-ElseIf performance = 2 Then 
-    Bonus = salary * 0.09 
-ElseIf performance = 3 Then 
-    Bonus = salary * 0.07 
-Else    
-    Bonus = 0 
-End If 
+With MyLabel 
+    MyLabel.Height = 2000 
+    MyLabel.Width = 2000 
+    MyLabel.Caption = "This is MyLabel" 
+End With
 
-If x Then y = 10 End If
-
+With MyObject 
+    MyObject.Height = 100 
+    MyObject.Caption = "Hello World"
+    With MyObject.Font 
+        MyObject.Font.Color = Red  
+        MyObject.Font.Bold = True  
+    End With
+End With

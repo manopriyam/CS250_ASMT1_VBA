@@ -72,42 +72,42 @@ gcc lex.yy.c y.tab.c
 ```
 - We have taken a few assumptions :
     - Conditional Statements : always have an 'End If' Keyword <br>
-    Assumed Syntax -
-    ```
-    If performance = 1 Then Bonus = salary * 0.1 End If 
-    ```
-    instead of -
-    ```
-    If performance = 1 Then Bonus = salary * 0.1  
-    ```
+        - Assumed Syntax -
+        ```
+        If performance = 1 Then Bonus = salary * 0.1 End If 
+        ```
+        - Instead of -
+        ```
+        If performance = 1 Then Bonus = salary * 0.1  
+        ```
     - For Loop : always has identifier specified after 'Next' Keyword <br>
-    Assumed Syntax -
-    ```
-    For i = 1 To 5 Step 5   
-        Dim x As Integer
-        z = 1 
-    Next i
-    ```
-    Instead of -
-    ```
-    For i = 1 To 5 Step 5   
-        Dim x As Integer
-        z = 1 
-    Next 
-    ```
+        - Assumed Syntax -
+        ```
+        For i = 1 To 5 Step 5   
+            Dim x As Integer
+            z = 1 
+        Next i
+        ```
+        - Instead of -
+        ```
+        For i = 1 To 5 Step 5   
+            Dim x As Integer
+            z = 1 
+        Next 
+        ```
     - With Block : always has the object properties explicitly specified <br>
-    Assumed Syntax -
-    ```
-    With MyLabel 
-        MyLabel.Height = 2000 
-    End With
-    ```
-    instead of -
-    ```
-    With MyLabel 
-        .Height = 2000 
-    End With
-    ```
+        - Assumed Syntax -
+        ```
+        With MyLabel 
+            MyLabel.Height = 2000 
+        End With
+        ```
+        - Instead of -
+        ```
+        With MyLabel 
+            .Height = 2000 
+        End With
+        ```
 
 <br>
 <br>

@@ -1,14 +1,19 @@
-Select Case Number     
-    Case 1 To 5
-        x = y + 10 
-    Case Is > 10
-        x = y + 10 
-    Case 9
-        x = y + 10
-    Case 1 To 4, 7 To 9, 11, 13, Is > MaxNumber 
-        x = y + 10
-    Case "everything", "nuts" To "soup", TestItem
-        x = y + 10
-    Case Else 
-        x = y + 10 
-End Select
+If performance = 1 Then 
+    Bonus = salary * 0.1 
+    If performance = 1 Then 
+    Bonus = salary * 0.1 
+    ElseIf performance = 2 Then 
+        Bonus = salary * 0.09 
+    Else    
+        Bonus = 0 
+    End If 
+ElseIf performance = 2 Then 
+    Bonus = salary * 0.09 
+ElseIf performance = 3 Then 
+    Bonus = salary * 0.07 
+Else    
+    Bonus = 0 
+End If 
+
+If x Then y = 10 End If
+

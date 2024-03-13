@@ -1,9 +1,6 @@
 Need to add grammar for 
 
-- Private Public Objects etc
-    https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/private-statement
-    https://learn.microsoft.com/en-us/office/vba/language/reference/user-interface-help/public-statement
-
+- Parenthesis Expressions Along with Rules
 
 - If Conditional Part 2 -> Simple if blocks can work without T_END_IF
     https://learn.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-ifthenelse-statements

@@ -1,14 +1,12 @@
-With MyLabel 
-    MyLabel.Height = 2000 
-    MyLabel.Width = 2000 
-    MyLabel.Caption = "This is MyLabel" 
-End With
+Type StateData 
+    cityCode (1 To 100) As Integer    ' Declare a static array. 
+    county As String * 30 
+End Type 
 
-With MyObject 
-    MyObject.Height = 100 
-    MyObject.Caption = "Hello World"
-    With MyObject.Font 
-        MyObject.Font.Color = Red  
-        MyObject.Font.Bold = True  
-    End With
-End With
+Type EmployeeRecord    ' Create user-defined type. 
+    id As Integer    ' Define elements of data type. 
+    name As String * 20 
+    address As String * 30 
+    phone As Long 
+    hireDate As Date 
+End Type 

@@ -70,6 +70,9 @@ statements : statement {
 statement : declaration {
         printf("\nCase : Declaration");
     } 
+    | redeclaration {
+        printf("\nCase : Re-Declaration");
+    } 
     | assignment {
         printf("\nCase : Assignment");
     } 
@@ -115,9 +118,15 @@ statement : declaration {
     | doWhileloop {        
         printf("\nCase : Do While Loop");
     }
-    | end_exit_statements {
+    | end_exit_statement {
         printf("\nCase : End/Exit statements");
-    } 
+    }
+    | pvtpubdeclaration {
+        printf("\nCase : Private/Public Declaration");
+    }
+    | pvtpubblock {
+        printf("\nCase : Private/Public Blocks");
+    }
     | COMMENT {
         printf("\nCase : Comment");
     }
@@ -132,6 +141,10 @@ declare : IDENTIFIER vartype
 
 declaration : T_DIM declare {    
         printf("\nDeclaration");
+    }
+
+redeclaration : T_REDIM declare {    
+        printf("\nRe-Declaration");
     }
 
 value : IDENTIFIER 
@@ -366,9 +379,22 @@ doWhileloop : T_DO_WHILE expression statements T_LOOP {
         printf("\nDo Until Loop 2");
     }
 
-end_exit_statements : T_EXIT_FOR 
+end_exit_statement : T_EXIT_FOR 
     | T_EXIT T_FUNCTION
     | T_EXIT_DO
+
+pvtpub : T_PRIVATE 
+    | T_PUBLIC
+
+pvtpubdeclaration : pvtpub declare {    
+        printf("\nPrivate/Public Declaration");
+    }
+
+pvtpubblock : pvtpub subblock 
+    | pvtpub functionblock
+    | pvtpub propertygetblock
+    | pvtpub propertyletblock
+    | pvtpub propertysetblock
 
 
 %%
