@@ -51,85 +51,33 @@
 %% 
 
 
-statements : statement {
-        printf("\nSingle Statement");
-    }
-    | statements statement {
-        printf("\nMultiple Statements");
-    }
-    | statements '_' {
-        printf("\nMultiple Statements 2");
-    }
-    | statements ':' {
-        printf("\nMultiple Statements 3");
-    }
-    | statements ';' {
-        printf("\nMultiple Statements 4");
-    }
+statements : statement 
+    | statements statement
+    | statements '_'
+    | statements ':'
+    | statements ';'
 
-statement : declaration {
-        printf("\nCase : Declaration");
-    } 
-    | redeclaration {
-        printf("\nCase : Re-Declaration");
-    } 
-    | assignment {
-        printf("\nCase : Assignment");
-    } 
-    | printing {
-        printf("\nCase : Printing");
-    }
-    | subblock {
-        printf("\nCase : Sub Block");
-    }
-    | functionblock {
-        printf("\nCase : Function Block");
-    }
-    | propertygetblock {
-        printf("\nCase : Property Get Block");
-    }
-    | propertysetblock {
-        printf("\nCase : Property Set Block");
-    }
-    | propertyletblock {
-        printf("\nCase : Property Let Block");
-    }
-    | typeblock {
-        printf("\nCase: Type Block");
-    }
-    | withblock {
-        printf("\nCase: With Block");
-    }
-    | conditionalifelse {
-        printf("\nCase : Conditional if-elseif-then");
-    }
-    | conditionalselectcase {        
-        printf("\nCase : Conditional Select Case");
-    }
-    | forloop {        
-        printf("\nCase : For Loop");
-    }
-    | foreachloop {        
-        printf("\nCase : For Each Loop");
-    }
-    | whileloop {        
-        printf("\nCase : While Loop");
-    }
-    | doWhileloop {        
-        printf("\nCase : Do While Loop");
-    }
-    | end_exit_statement {
-        printf("\nCase : End/Exit statements");
-    }
-    | pvtpubdeclaration {
-        printf("\nCase : Private/Public Declaration");
-    }
-    | pvtpubblock {
-        printf("\nCase : Private/Public Blocks");
-    }
-    | COMMENT {
-        printf("\nCase : Comment");
-    }
+statement : declaration
+    | redeclaration 
+    | assignment 
+    | printing 
+    | subblock 
+    | functionblock
+    | propertygetblock 
+    | propertysetblock 
+    | propertyletblock 
+    | typeblock 
+    | withblock 
+    | conditionalifelse
+    | conditionalselectcase
+    | forloop 
+    | foreachloop
+    | whileloop 
+    | doWhileloop
+    | end_exit_statement
+    | pvtpubdeclaration 
+    | pvtpubblock
+    | COMMENT 
 
 vartype : T_AS DATATYPE 
 	| T_AS IDENTIFIER
@@ -139,13 +87,9 @@ declare : IDENTIFIER vartype
     | declare ',' IDENTIFIER vartype 
     | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype
 
-declaration : T_DIM declare {    
-        printf("\nDeclaration");
-    }
+declaration : T_DIM declare
 
-redeclaration : T_REDIM declare {    
-        printf("\nRe-Declaration");
-    }
+redeclaration : T_REDIM declare 
 
 value : IDENTIFIER 
     | STRING_LITERAL 
@@ -156,78 +100,31 @@ numbers : IDENTIFIER
     | NUMERIC_LITERAL
     | FLOAT_LITERAL
 
-expression : expression T_PLUS expression {
-        printf("\nAddition");
-    }
-    | expression T_MINUS expression {
-        printf("\nSubtraction");
-    }
-    | expression T_MULTIPLY expression {
-        printf("\nMultiplication");
-    }
-    | expression T_DIVIDE expression {
-        printf("\nDivision");
-    }
-    | expression T_BACKSLASH expression {
-        printf("\nBackslash Division");
-    }
-    | expression T_MOD expression {
-        printf("\nModulo");
-    }
-    | expression T_POWER expression {
-        printf("\nExponentiation");
-    }
-    | expression T_CONCATENATE expression {
-        printf("\nConcatenation");
-    }
-    | expression T_EQUAL expression {
-        printf("\nEqual");
-    }
-    | expression T_NOT_EQUAL expression {
-        printf("\nNot Equal");
-    }
-    | expression T_LESS_EQUAL expression {
-        printf("\nLess Than or Equal");
-    }
-    | expression T_GREATER_EQUAL expression {
-        printf("\nGreater Than or Equal");
-    }
-    | expression T_LESS_THAN expression {
-        printf("\nLess Than");
-    }
-    | expression T_GREATER_THAN expression {
-        printf("\nGreater Than");
-    }
-    | expression T_IS expression {
-        printf("\nIs");
-    }
-    | expression T_LIKE expression {
-        printf("\nLike");
-    }
-    | expression T_NOT expression {
-        printf("\nNot");
-    }
-    | expression T_AND expression {
-        printf("\nAnd");
-    }
-    | expression T_OR expression {
-        printf("\nOr");
-    }
-    | expression T_XOR expression {
-        printf("\nXor");
-    }
-    | expression T_EQV expression {
-        printf("\nEquivalence");
-    }
-    | expression T_IMP expression {
-        printf("\nImplication");
-    }
-    | value {
-        printf("\nValue");
-    }
-    | objectblock {
-        printf("\nObject");
-    }
+expression : expression T_PLUS expression
+    | expression T_MINUS expression 
+    | expression T_MULTIPLY expression
+    | expression T_DIVIDE expression 
+    | expression T_BACKSLASH expression
+    | expression T_MOD expression 
+    | expression T_POWER expression
+    | expression T_CONCATENATE expression
+    | expression T_EQUAL expression 
+    | expression T_NOT_EQUAL expression 
+    | expression T_LESS_EQUAL expression
+    | expression T_GREATER_EQUAL expression 
+    | expression T_LESS_THAN expression 
+    | expression T_GREATER_THAN expression
+    | expression T_IS expression 
+    | expression T_LIKE expression
+    | expression T_NOT expression
+    | expression T_AND expression 
+    | expression T_OR expression 
+    | expression T_XOR expression
+    | expression T_EQV expression
+    | expression T_IMP expression
+    | '(' expression ')'
+    | value 
+    | objectblock
 
 assignment : IDENTIFIER T_EQUAL expression 
 	| objectblock T_EQUAL expression 
@@ -250,42 +147,24 @@ obj : IDENTIFIER '(' valuecomma ')'
 valuecomma : value
     | valuecomma ',' value
 
-printvalues : T_CONCATENATE value printvalues {
-        printf("\nPrinting Multiple");
-    }
-    | T_CONCATENATE value {
-        printf("\nPrinting Single");
-    }
+printvalues : T_CONCATENATE value printvalues 
+    | T_CONCATENATE value 
 
-printing : T_MSG_BOX STRING_LITERAL {
-        printf("\nPrinting Message Only");
-    }
-    | T_MSG_BOX STRING_LITERAL printvalues {
-        printf("\nPrinting Variables Also");
-    }
+printing : T_MSG_BOX STRING_LITERAL 
+    | T_MSG_BOX STRING_LITERAL printvalues 
 
 paramdeclare : declare 
     | /* empty */
 
-subblock : T_SUB IDENTIFIER '(' paramdeclare ')' statements T_END T_SUB {
-        printf("\nSub Block Statements");
-    }
+subblock : T_SUB IDENTIFIER '(' paramdeclare ')' statements T_END T_SUB
     
-functionblock : T_FUNCTION IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_FUNCTION {
-        printf("\nFunction Block Statements");
-    }
+functionblock : T_FUNCTION IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_FUNCTION 
 
-propertygetblock : T_PROPERTY_GET IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_PROPERTY {
-        printf("\nProperty Get Block Statements");
-    }
+propertygetblock : T_PROPERTY_GET IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_PROPERTY 
 
-propertysetblock : T_PROPERTY_SET IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_PROPERTY {
-        printf("\nProperty Set Block Statements");
-    }
+propertysetblock : T_PROPERTY_SET IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_PROPERTY 
 
-propertyletblock : T_PROPERTY_LET IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_PROPERTY {
-        printf("\nProperty Let Block Statements");
-    }
+propertyletblock : T_PROPERTY_LET IDENTIFIER '(' paramdeclare ')' vartype statements T_END T_PROPERTY 
 
 typeblock : T_TYPE IDENTIFIER type_declaration T_END T_TYPE 
     | T_TYPE IDENTIFIER COMMENT type_declaration T_END T_TYPE 
@@ -305,29 +184,19 @@ type_dec_value : IDENTIFIER
 withblock : T_WITH IDENTIFIER statements T_END_WITH 
     | T_WITH objectblock statements T_END_WITH 
 
-conditionalifelse : ifblock elseifs elseblock T_END_IF {
-        printf("\nIf-ElseIf-Then Block");
-    } 
+conditionalifelse : ifblock elseifs elseblock T_END_IF 
 
-ifblock : T_IF expression T_THEN statements {
-        printf("\nIf Block");
-    } 
+ifblock : T_IF expression T_THEN statements 
 
 elseifs : elseifs elseifblock 
     | /* empty */
 
-elseifblock : T_ELSE_IF expression T_THEN statements {
-        printf("\nElse-If Block");
-    }
+elseifblock : T_ELSE_IF expression T_THEN statements 
 
-elseblock : T_ELSE statements {
-        printf("\nElse Block");
-    }
+elseblock : T_ELSE statements
     | /* empty */
 
-conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT {
-        printf("\nSelect Case");
-    }
+conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT 
 
 cases : cases caseblock 
     | /* empty */
@@ -351,33 +220,19 @@ compop : T_EQUAL
     | T_LESS_THAN
     | T_GREATER_THAN
 
-forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER {
-        printf("\nFor Loop");
-	}
+forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER 
 
-foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements T_NEXT IDENTIFIER {
-        printf("\nFor Each Loop");
-	}
+foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements T_NEXT IDENTIFIER 
 
 stepping : T_STEP numbers 
     | /* empty */
 
-whileloop : T_WHILE expression statements T_WEND {
-        printf("\nWhile loop");
-    }
+whileloop : T_WHILE expression statements T_WEND 
 	
-doWhileloop : T_DO_WHILE expression statements T_LOOP {
-        printf("\nDo While Loop 1");
-    }
-    | T_DO_UNTIL expression statements T_LOOP {
-        printf("\nDo Until Loop 1");
-    }
-    | T_DO statements T_LOOP T_WHILE expression {
-        printf("\nDo While Loop 2");
-    }
-    | T_DO statements T_LOOP T_UNTIL expression {
-        printf("\nDo Until Loop 2");
-    }
+doWhileloop : T_DO_WHILE expression statements T_LOOP 
+    | T_DO_UNTIL expression statements T_LOOP 
+    | T_DO statements T_LOOP T_WHILE expression 
+    | T_DO statements T_LOOP T_UNTIL expression 
 
 end_exit_statement : T_EXIT_FOR 
     | T_EXIT T_FUNCTION
@@ -386,9 +241,7 @@ end_exit_statement : T_EXIT_FOR
 pvtpub : T_PRIVATE 
     | T_PUBLIC
 
-pvtpubdeclaration : pvtpub declare {    
-        printf("\nPrivate/Public Declaration");
-    }
+pvtpubdeclaration : pvtpub declare
 
 pvtpubblock : pvtpub subblock 
     | pvtpub functionblock
@@ -417,6 +270,7 @@ void main (int argc, char** argv) {
     
     int ch = fgetc(file); // check if empty file
     if (ch == EOF) { // error for invalid file 
+        printf("ERROR : Empty file.\n");
         return;
     }
     fclose(file);

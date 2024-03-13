@@ -2,12 +2,9 @@ Private Sub CalculateTotal()
     Dim subtotal As Double
     Dim taxRate As Double
     Dim total As Double
-    
     subtotal = 100
     taxRate = 0.1 ' 10%
-    
     total = subtotal * (1 + taxRate)
-    
     MsgBox "Total: " & total
 End Sub
 
@@ -18,6 +15,11 @@ End Function
 Private Number As Integer ' Private Integer variable. 
 Private NameArray(1 To 5) As String ' Private array variable. 
 Private MyVar, YourVar, ThisVar As Integer
+Public NumberOfEmployees As Integer
+Public X As Worksheet
+Public Number As Integer ' Public Integer variable. 
+Public NameArray(1 To 5) As String ' Public array variable. 
+Public MyVar, YourVar, ThisVar As Integer
 
 Public Property Get Value() As Integer
     Value = myValue
@@ -31,12 +33,9 @@ Sub CalculateTotal()
     Dim subtotal As Double
     Dim taxRate As Double
     Dim total As Double
-    
     subtotal = 100
     taxRate = 0.1 ' 10%
-    
     total = subtotal * (1 + taxRate)
-    
     MsgBox "Total: " & total
 End Sub
 

@@ -71,7 +71,25 @@ gcc lex.yy.c y.tab.c
 ./a.out VBAtrial.bas
 ```
 - We have taken a few assumptions :
-    - Conditional Statements : always have an 'End If' Keyword <br>
+    - Expressions : There is whitespace between any LITERAL and OPERATOR <br>
+        - Assumed Syntax -
+        ```
+        result = {2 + [3 * (4 - 1)]} / [5 + {5 * (2 - 1)}]
+        ```
+        - Instead of -
+        ```
+        result = (2+(3*(4-1)))/(5+(5*(2-1)))
+        ```
+    - Expressions : only first brackets '(' and ')' are used, if any. <br>
+        - Assumed Syntax -
+        ```
+        result = {2 + [3 * (4 - 1)]} / [5 + {5 * (2 - 1)}]
+        ```
+        - Instead of -
+        ```
+        result = (2 + (3 * (4 - 1))) / (5 + (5 * (2 - 1)))
+        ```
+    - Conditional Statements : always have an 'End If' KEYWORD <br>
         - Assumed Syntax -
         ```
         If performance = 1 Then Bonus = salary * 0.1 End If 
@@ -80,7 +98,7 @@ gcc lex.yy.c y.tab.c
         ```
         If performance = 1 Then Bonus = salary * 0.1  
         ```
-    - For Loop : always has identifier specified after 'Next' Keyword <br>
+    - For Loop : always has identifier specified after 'Next' KEYWORD <br>
         - Assumed Syntax -
         ```
         For i = 1 To 5 Step 5   
