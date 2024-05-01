@@ -47,7 +47,7 @@
 	} nd_obj; // using nd_obj instead
 }; 
 
-%start statements
+%start program
 
 %token <nd_obj> COMMENT STRING_LITERAL OBJECT OBJECT_BLOCK DATATYPE
 
@@ -61,7 +61,7 @@
 %token <nd_obj> FLOAT_LITERAL 
 %token <nd_obj> IDENTIFIER PARENTHESIS SEPARATOR
 
-%type <nd_obj> statements statement vartype declare declaration redeclaration value expression assignment printvalues printing conditionalifelse ifblock elseifs elseifblock elseblock
+%type <nd_obj> program statements statement vartype declare declaration redeclaration value expression assignment printvalues printing conditionalifelse ifblock elseifs elseifblock elseblock
 
 %left T_IMP T_EQV
 %left T_XOR
@@ -83,6 +83,8 @@
 /* Rule Section */
 %% 
 
+
+program : statements { $$.nd = $1.nd; head = $$.nd; }
 
 statements : statement        { $$.nd = $1.nd; }
     | statements statement    { $$.nd = $1.nd; }
@@ -115,24 +117,41 @@ statement : declaration               { printf("\nStatement : Declaration"); $$.
     /* | pvtpubpropgetblock              { printf("\nBlock : Private/Public Property Get Procedure"); } */
     /* | pvtpubpropsetblock              { printf("\nBlock : Private/Public Property Set Procedure"); } */
     /* | pvtpubpropletblock              { printf("\nBlock : Private/Public Property Let Procedure"); } */
-    | COMMENT                         { printf("\nStatement : Comment"); $$.nd = mknode(NULL, NULL, $1.name); }
+    | COMMENT                         { printf("\nStatement : Comment"); $$.nd = mknode(NULL, NULL, "COMMENT"); }
 
-vartype : T_AS  DATATYPE { insert_type(); }
-	| T_AS IDENTIFIER			
+vartype : T_AS  DATATYPE { 
+        insert_type(); 
+        $1.nd = mknode(NULL, NULL, $1.name); 
+        $2.nd = mknode(NULL, NULL, $2.name); 
+        $$.nd = mknode($1.nd, $2.nd, "vartype"); 
+    }
+	/* | T_AS IDENTIFIER			 */
     | /* empty */
 
-declare : IDENTIFIER vartype 		
-    | declare ',' IDENTIFIER vartype 			
-    | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype   
+declare : IDENTIFIER vartype { 
+        $1.nd = mknode(NULL, NULL, $1.name); 
+        $$.nd = mknode($1.nd, $2.nd, "declareSingle"); 
+    }		
+    | declare ',' IDENTIFIER vartype { 
+        $3.nd = mknode(NULL, NULL, $3.name);
+        $$.nd = mknode($1.nd, mknode($3.nd, $4.nd, "declareSingle"), "declareMultiple"); 
+    }
+    /* | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype   */
 
-declaration : T_DIM declare
+declaration : T_DIM declare { 
+        $1.nd = mknode(NULL, NULL, $1.name); 
+        $$.nd = mknode($1.nd, $2.nd, "declaration"); 
+    }
 
-redeclaration : T_REDIM declare 
+redeclaration : T_REDIM declare { 
+        $1.nd = mknode(NULL, NULL, $1.name); 
+        $$.nd = mknode($1.nd, $2.nd, "redeclaration"); 
+    }
 
 value : IDENTIFIER         { add('V'); $$.nd = mknode(NULL, NULL, $1.name); }
     | STRING_LITERAL       { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
-    | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
-    | FLOAT_LITERAL        { add('C'); $$.nd = mknode(NULL, NULL, "FLOATING_NUMBER"); }
+    | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
+    | FLOAT_LITERAL        { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
 /*
 numbers : IDENTIFIER       { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
     | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
@@ -164,10 +183,10 @@ expression : expression T_PLUS expression               { $$.nd = mknode($1.nd, 
     | value                                             { $$.nd = $1.nd; }
     /* | objectblock */
 
-assignment : IDENTIFIER T_EQUAL expression { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $3.nd, "="); }
+assignment : IDENTIFIER T_EQUAL expression { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $3.nd, $2.name); }
 	/* | objectblock T_EQUAL expression    */
-    | T_SET assignment                     { $$.nd = $2.nd; }
-    | T_LET assignment                     { $$.nd = $2.nd; }
+    | T_SET assignment                     { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $2.nd, $1.name); }
+    | T_LET assignment                     { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $2.nd, $1.name); }
 /*
 objectblock : object 
 
@@ -185,11 +204,21 @@ obj : IDENTIFIER '(' valuecomma ')'
 valuecomma : value
     | valuecomma ',' value
 */
-printvalues : T_CONCATENATE value printvalues 
-    | T_CONCATENATE value 
+printvalues : T_CONCATENATE value printvalues {
+        $$.nd = mknode($2.nd, $3.nd, $1.name);
+    }
+    | T_CONCATENATE value {
+        $$.nd = mknode($2.nd, NULL, $1.name);
+    }
 
-printing : T_MSG_BOX STRING_LITERAL 
-    | T_MSG_BOX STRING_LITERAL printvalues 
+printing : T_MSG_BOX STRING_LITERAL {
+        $2.nd = mknode(NULL, NULL, $2.name);
+        $$.nd = mknode($2.nd, NULL, "printing");
+    }
+    | T_MSG_BOX STRING_LITERAL printvalues {
+        $2.nd = mknode(NULL, NULL, $2.name);
+        $$.nd = mknode($2.nd, $3.nd, "printing");
+    }
 /*
 paramdeclare : declare 
     | // empty 
@@ -236,14 +265,26 @@ conditionalifelse : ifblock elseifs elseblock T_END_IF {
         }
     } 
 
-ifblock : T_IF expression T_THEN statements 
+ifblock : T_IF expression T_THEN statements {
+        /* Action for handling the IF block */
+        $$.nd = mknode($2.nd, $4.nd, "if-block");
+    }
 
-elseifs : elseifs elseifblock 
+elseifs : elseifs elseifblock {
+        /* Action for handling the IF block */
+        $$.nd = mknode($1.nd, $2.nd, "elseif-blocks");
+    }
     | /* empty */
 
-elseifblock : T_ELSE_IF expression T_THEN statements 
+elseifblock : T_ELSE_IF expression T_THEN statements {
+        /* Action for handling the ELSE IF block */
+        $$.nd = mknode($2.nd, $4.nd, "else-if-block");
+    }
 
-elseblock : T_ELSE statements
+elseblock : T_ELSE statements {
+        /* Action for handling the ELSE block */
+        $$.nd = mknode($2.nd, NULL, "else-block");
+    }
     | /* empty */
 /*
 conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT 
@@ -369,7 +410,7 @@ struct node* mknode (struct node *left, struct node *right, char *token) {
 }
 
 void printtree (struct node* tree) {
-	printf("\n\n Inorder traversal of the Parse Tree: \n\n");
+	printf("\n\nInorder traversal of the Parse Tree: \n\n");
 	printInorder(tree);
 	printf("\n\n");
 }
