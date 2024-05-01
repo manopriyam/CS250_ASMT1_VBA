@@ -252,19 +252,16 @@ withblock : T_WITH IDENTIFIER statements T_END_WITH
     | T_WITH objectblock statements T_END_WITH 
 */
 conditionalifelse : ifblock elseifs elseblock T_END_IF {
-        /* Actions for handling the IF-ELSE statement */
         if ($2.nd == NULL && $3.nd == NULL) {
-            /* Only IF block */
             $$.nd = $1.nd;
-        } else if ($2.nd != NULL && $3.nd == NULL) {
-            /* IF-ELSEIF blocks only */
+        } 
+        else if ($2.nd != NULL && $3.nd == NULL) {
             $$.nd = mknode($1.nd, $2.nd, "if-elseif");
-        } else if ($2.nd != NULL && $3.nd != NULL) {
-            /* IF-ELSEIF-ELSE blocks */
-            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif2"), $3.nd, "if-elseif-else");
+        } 
+        else if ($2.nd != NULL && $3.nd != NULL) {
+            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif"), $3.nd, "if-elseif-else");
         }
         else if ($2.nd == NULL && $3.nd != NULL) {
-            /* IF-ELSEIF-ELSE blocks */
             $$.nd = mknode($1.nd, $3.nd, "if-else");
         }
     }
@@ -275,10 +272,10 @@ ifblock : T_IF expression T_THEN statements {
 
 elseifs : elseifs elseifblock {
         if ($1.nd != NULL) {
-            $$.nd = mknode($1.nd, $2.nd, "else-if-blocks");
+            $$.nd = mknode($1.nd, $2.nd, "else-if-blocks-Multiple");
         }
         else if ($1.nd == NULL) {  
-            $$.nd = mknode(NULL, $2.nd, "else-if-blocks2");
+            $$.nd = mknode(NULL, $2.nd, "else-if-blocks-Single");
         }
     }
     | /* empty */ { $$.nd = NULL; }
@@ -290,7 +287,7 @@ elseifblock : T_ELSE_IF expression T_THEN statements {
 elseblock : T_ELSE statements {
         $$.nd = mknode($2.nd, NULL, "else-block");
     }
-    | /* empty */
+    | /* empty */ { $$.nd = NULL; }
 /*
 conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT 
 
