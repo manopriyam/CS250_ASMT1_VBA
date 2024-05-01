@@ -34,7 +34,7 @@
         int line_no;
     } symbolTable[40];
 
-    void add(char);
+    void add(char, char *);
     void insert_type();
     int search(char *);
 %}
@@ -148,10 +148,10 @@ redeclaration : T_REDIM declare {
         $$.nd = mknode($1.nd, $2.nd, "redeclaration"); 
     }
 
-value : IDENTIFIER         { add('V'); $$.nd = mknode(NULL, NULL, $1.name); }
-    | STRING_LITERAL       { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
-    | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
-    | FLOAT_LITERAL        { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
+value : IDENTIFIER         { add('V', ""); $$.nd = mknode(NULL, NULL, $1.name); }
+    | STRING_LITERAL       { add('C', "String"); $$.nd = mknode(NULL, NULL, $1.name); }
+    | NUMERIC_LITERAL      { add('C', "Integer"); $$.nd = mknode(NULL, NULL, $1.name); }
+    | FLOAT_LITERAL        { add('C', "Double"); $$.nd = mknode(NULL, NULL, $1.name); }
 /*
 numbers : IDENTIFIER       { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
     | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
@@ -389,7 +389,7 @@ void main (int argc, char** argv) {
 	for (int i=0; i<count; i++) {
 		printf("%10s\t %10s\t %10s\t %10d\t\n", symbolTable[i].id_name, symbolTable[i].data_type, symbolTable[i].type, symbolTable[i].line_no);
 	}
-	for (int i=0;i<count;i++){
+	for (int i=0; i<count; i++){
 		free(symbolTable[i].id_name);
 		free(symbolTable[i].type);
 	}
@@ -418,37 +418,30 @@ void printtree (struct node* tree) {
 }
 
 void printInorder (struct node *tree) {
-	int i;
-    /* printf("["); */
 	if (tree->left) {
 		printInorder(tree->left);
 	}
-    /* printf("]"); */
 	printf("%s, ", tree->token);
-    /* printf("["); */
-	if (tree->right) {
+    if (tree->right) {
 		printInorder(tree->right);
 	}
-    /* printf("]"); */
 }
 
-void add (char c) {
-    q=search(yytext);
-	if (q==0) {
-		if(c=='V') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup(type);
-			symbolTable[count].line_no=yylineno;
-			symbolTable[count].type=strdup("Variable");
-			count++;
-		}
-		else if(c=='C') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup("CONST");
-			symbolTable[count].line_no=yylineno;
-			symbolTable[count].type=strdup("Constant");
-			count++;
-		}
+void add (char c, char *t) {
+    q = search(yytext);
+    if (q==-1 && c=='V') {
+        symbolTable[count].id_name=strdup(yytext);
+        symbolTable[count].data_type=strdup(type);
+        symbolTable[count].line_no=yylineno;
+        symbolTable[count].type=strdup("Variable");
+        count++;
+    }
+    else if (c=='C') {
+        symbolTable[count].id_name=strdup(yytext);
+        symbolTable[count].data_type=strdup(t);
+        symbolTable[count].line_no=yylineno;
+        symbolTable[count].type=strdup("Constant");
+        count++;
     }
 }
 
@@ -456,14 +449,14 @@ void insert_type() {
 	strcpy(type, yytext);
 }
 
-int search (char *type) {
+int search (char *name) {
 	for (int i=count-1; i>=0; i--) {
-		if (strcmp(symbolTable[i].id_name, type)==0) {
-			return -1;
+		if (strcmp(symbolTable[i].id_name, name)==0) {
+			return i;
 			break;
-		}
+		
 	}
-	return 0;
+	return -1;
 }
 
 void yyerror (char *s) { 
