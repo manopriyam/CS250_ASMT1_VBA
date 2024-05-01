@@ -61,7 +61,7 @@
 %token <nd_obj> FLOAT_LITERAL 
 %token <nd_obj> IDENTIFIER PARENTHESIS SEPARATOR
 
-%type <nd_obj> declaration redeclaration declare vartype assignment expression value statement statements conditionalifelse ifblock elseifs elseblock elseifblock
+%type <nd_obj> statements statement vartype declare declaration redeclaration value expression assignment printvalues printing conditionalifelse ifblock elseifs elseifblock elseblock
 
 %left T_IMP T_EQV
 %left T_XOR
@@ -90,10 +90,10 @@ statements : statement        { $$.nd = $1.nd; }
     | statements ':'          { $$.nd = $1.nd; }
     | statements ';'          { $$.nd = $1.nd; }
 
-statement : declaration               { printf("\nStatement : Declaration"); }	
-    | redeclaration                   { printf("\nStatement : Re-Declaration"); }
-    | assignment                      { printf("\nStatement : Assignment"); }	
-    | printing                        { printf("\nStatement : Printing"); }
+statement : declaration               { printf("\nStatement : Declaration"); $$.nd = $1.nd; }	
+    | redeclaration                   { printf("\nStatement : Re-Declaration"); $$.nd = $1.nd; }
+    | assignment                      { printf("\nStatement : Assignment"); $$.nd = $1.nd; }	
+    | printing                        { printf("\nStatement : Printing"); $$.nd = $1.nd; }
     /* | subblock                        { printf("\nBlock : Sub Procedure"); } */
     /* | functionblock                   { printf("\nBlock : Function Procedure"); } */
     /* | propertygetblock                { printf("\nBlock : Property Get Procedure"); } */
@@ -101,7 +101,7 @@ statement : declaration               { printf("\nStatement : Declaration"); }
     /* | propertyletblock                { printf("\nBlock : Property Let Procedure"); } */
     /* | typeblock                       { printf("\nBlock : Type Procedure"); } */
     /* | withblock                       { printf("\nBlock : With Procedure"); } */
-    | conditionalifelse               { printf("\nBlock : Conditional If-ElseIf-Then"); }
+    | conditionalifelse               { printf("\nBlock : Conditional If-ElseIf-Then"); $$.nd = $1.nd; }
     /* | conditionalselectcase           { printf("\nBlock : Conditional Select-Case"); } */
     /* | forloop                         { printf("\nBlock : For Loop"); } */
     /* | foreachloop                     { printf("\nBlock : For Each Loop"); } */
@@ -115,9 +115,9 @@ statement : declaration               { printf("\nStatement : Declaration"); }
     /* | pvtpubpropgetblock              { printf("\nBlock : Private/Public Property Get Procedure"); } */
     /* | pvtpubpropsetblock              { printf("\nBlock : Private/Public Property Set Procedure"); } */
     /* | pvtpubpropletblock              { printf("\nBlock : Private/Public Property Let Procedure"); } */
-    | COMMENT                         { printf("\nStatement : Comment"); }
+    | COMMENT                         { printf("\nStatement : Comment"); $$.nd = mknode(NULL, NULL, $1.name); }
 
-vartype : T_AS  DATATYPE		
+vartype : T_AS  DATATYPE { insert_type(); }
 	| T_AS IDENTIFIER			
     | /* empty */
 
@@ -341,10 +341,10 @@ void main (int argc, char** argv) {
 
     printf("\n\nPHASE 1: LEXICAL ANALYSIS --------------------\n\n");
 
-	printf("\nSYMBOL   DATATYPE   TYPE   LINE NUMBER \n");
-	printf("_______________________________________\n\n");
+	printf("\n    SYMBOL         DATATYPE          TYPE          LINE NUMBER     \n");
+	printf("______________________________________________________________________\n\n");
 	for (int i=0; i<count; i++) {
-		printf("%s\t\t %s\t\t %s\t\t %d\t\t\n", symbolTable[i].id_name, symbolTable[i].data_type, symbolTable[i].type, symbolTable[i].line_no);
+		printf("%10s\t %10s\t %10s\t %10d\t\n", symbolTable[i].id_name, symbolTable[i].data_type, symbolTable[i].type, symbolTable[i].line_no);
 	}
 	for (int i=0;i<count;i++){
 		free(symbolTable[i].id_name);
@@ -359,8 +359,8 @@ void main (int argc, char** argv) {
 }
 
 struct node* mknode (struct node *left, struct node *right, char *token) {	
-	struct node *newnode = (struct node *)malloc(sizeof(struct node));
-	char *newstr = (char *)malloc(strlen(token)+1);
+	struct node *newnode = (struct node*)malloc(sizeof(struct node));
+	char *newstr = (char*)malloc(strlen(token)+1);
 	strcpy(newstr, token);
 	newnode->left = left;
 	newnode->right = right;
@@ -407,10 +407,6 @@ void add (char c) {
 
 void insert_type() {
 	strcpy(type, yytext);
-}
-
-void insert_type_new (char *text) {
-	strcpy(type, text);
 }
 
 int search (char *type) {
