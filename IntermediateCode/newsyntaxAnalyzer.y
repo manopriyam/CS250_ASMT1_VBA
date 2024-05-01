@@ -87,7 +87,7 @@
 program : statements { $$.nd = $1.nd; head = $$.nd; }
 
 statements : statement        { $$.nd = $1.nd; }
-    | statements statement    { $$.nd = $1.nd; }
+    | statements statement    { $$.nd = mknode($1.nd, $2.nd, "statements"); }
     | statements '_'          { $$.nd = $1.nd; }
     | statements ':'          { $$.nd = $1.nd; }
     | statements ';'          { $$.nd = $1.nd; }
@@ -261,28 +261,33 @@ conditionalifelse : ifblock elseifs elseblock T_END_IF {
             $$.nd = mknode($1.nd, $2.nd, "if-elseif");
         } else if ($2.nd != NULL && $3.nd != NULL) {
             /* IF-ELSEIF-ELSE blocks */
-            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif"), $3.nd, "if-elseif-else");
+            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif2"), $3.nd, "if-elseif-else");
         }
-    } 
+        else if ($2.nd == NULL && $3.nd != NULL) {
+            /* IF-ELSEIF-ELSE blocks */
+            $$.nd = mknode($1.nd, $3.nd, "if-else");
+        }
+    }
 
 ifblock : T_IF expression T_THEN statements {
-        /* Action for handling the IF block */
         $$.nd = mknode($2.nd, $4.nd, "if-block");
     }
 
 elseifs : elseifs elseifblock {
-        /* Action for handling the IF block */
-        $$.nd = mknode($1.nd, $2.nd, "elseif-blocks");
+        if ($1.nd != NULL) {
+            $$.nd = mknode($1.nd, $2.nd, "else-if-blocks");
+        }
+        else if ($1.nd == NULL) {  
+            $$.nd = mknode(NULL, $2.nd, "else-if-blocks2");
+        }
     }
-    | /* empty */
+    | /* empty */ { $$.nd = NULL; }
 
 elseifblock : T_ELSE_IF expression T_THEN statements {
-        /* Action for handling the ELSE IF block */
         $$.nd = mknode($2.nd, $4.nd, "else-if-block");
     }
 
 elseblock : T_ELSE statements {
-        /* Action for handling the ELSE block */
         $$.nd = mknode($2.nd, NULL, "else-block");
     }
     | /* empty */
@@ -417,13 +422,17 @@ void printtree (struct node* tree) {
 
 void printInorder (struct node *tree) {
 	int i;
+    /* printf("["); */
 	if (tree->left) {
 		printInorder(tree->left);
 	}
+    /* printf("]"); */
 	printf("%s, ", tree->token);
+    /* printf("["); */
 	if (tree->right) {
 		printInorder(tree->right);
 	}
+    /* printf("]"); */
 }
 
 void add (char c) {
