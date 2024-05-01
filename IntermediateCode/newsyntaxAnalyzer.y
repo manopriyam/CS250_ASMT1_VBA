@@ -3,45 +3,48 @@
     #include<stdio.h> 
     #include<stdlib.h>  
     #include<string.h>
-    #include<ctype.h>
     int flag=0; 
     extern FILE *yyin;
     extern int yylineno;
     extern char* yytext;
-    void add(char);
-    void insert_type();
-    int search(char *);
-    void insert_type();
-    void printtree(struct node*);
-    void printInorder(struct node *);
-    struct node* mknode(struct node *left, struct node *right, char *token);
 
+    #include<ctype.h>
+    int count=0;
+    int q;
+    char type[20];
+    // extern int countn;
+
+    struct node { 
+        struct node *left; 
+        struct node *right; 
+        char *token; 
+    }; // struct node for each node of the parse tree for the grammar
+
+    struct node* mknode (struct node *left, struct node *right, char *token); // function to create node
+
+    void printtree(struct node*); 
+    void printInorder(struct node *); 
+    
+    struct node *head;
+    
     struct dataType {
         char * id_name;
         char * data_type;
         char * type;
         int line_no;
     } symbolTable[40];
-    int count=0;
-    int q;
-    char type[20];
-    extern int countn;
-    struct node *head;
-    struct node { 
-	struct node *left; 
-	struct node *right; 
-	char *token; 
-    };
-    
+
+    void add(char);
+    void insert_type();
+    int search(char *);
 %}
-%union{
-	int numval;
-    	//char* strval;
-    	double fltval;
+
+
+%union {
 	struct var_name { 
 		char* name; 
 		struct node* nd;
-	} nd_obj; 
+	} nd_obj; // using nd_obj instead
 }; 
 
 %start statements
@@ -58,8 +61,7 @@
 %token <nd_obj> FLOAT_LITERAL 
 %token <nd_obj> IDENTIFIER PARENTHESIS SEPARATOR
 
-%type <nd_obj>  assignment expression value numbers statement statements conditionalifelse ifblock elseifs elseblock  elseifblock
-//declaration redeclaration  declare vartype
+%type <nd_obj> declaration redeclaration declare vartype assignment expression value statement statements conditionalifelse ifblock elseifs elseblock elseifblock
 
 %left T_IMP T_EQV
 %left T_XOR
@@ -78,56 +80,42 @@
 %nonassoc NEXT
 
 
-
 /* Rule Section */
 %% 
 
 
-statements : statement { $$.nd = $1.nd; }
-    | statements statement { $$.nd = $1.nd; }
-    | statements '_' { $$.nd = $1.nd; }
-    | statements ':' { $$.nd = $1.nd; }
-    | statements ';' { $$.nd = $1.nd; }
+statements : statement        { $$.nd = $1.nd; }
+    | statements statement    { $$.nd = $1.nd; }
+    | statements '_'          { $$.nd = $1.nd; }
+    | statements ':'          { $$.nd = $1.nd; }
+    | statements ';'          { $$.nd = $1.nd; }
 
-statement : //declaration               { printf("\nStatement : Declaration"); }	{ $$.nd = $1.nd; }
-    //| redeclaration                   { printf("\nStatement : Re-Declaration"); }
-     assignment                      { printf("\nStatement : Assignment"); }	{ $$.nd = $1.nd; }
+statement : declaration               { printf("\nStatement : Declaration"); }	
+    | redeclaration                   { printf("\nStatement : Re-Declaration"); }
+    | assignment                      { printf("\nStatement : Assignment"); }	
     | printing                        { printf("\nStatement : Printing"); }
-    | subblock                        { printf("\nBlock : Sub Procedure"); }
-    | functionblock                   { printf("\nBlock : Function Procedure"); }
-    | propertygetblock                { printf("\nBlock : Property Get Procedure"); }
-    | propertysetblock                { printf("\nBlock : Property Set Procedure"); }
-    | propertyletblock                { printf("\nBlock : Property Let Procedure"); }
-    | typeblock                       { printf("\nBlock : Type Procedure"); }
-    | withblock                       { printf("\nBlock : With Procedure"); }
+    /* | subblock                        { printf("\nBlock : Sub Procedure"); } */
+    /* | functionblock                   { printf("\nBlock : Function Procedure"); } */
+    /* | propertygetblock                { printf("\nBlock : Property Get Procedure"); } */
+    /* | propertysetblock                { printf("\nBlock : Property Set Procedure"); } */
+    /* | propertyletblock                { printf("\nBlock : Property Let Procedure"); } */
+    /* | typeblock                       { printf("\nBlock : Type Procedure"); } */
+    /* | withblock                       { printf("\nBlock : With Procedure"); } */
     | conditionalifelse               { printf("\nBlock : Conditional If-ElseIf-Then"); }
-    | conditionalselectcase           { printf("\nBlock : Conditional Select-Case"); }
-    | forloop                         { printf("\nBlock : For Loop"); }
-    | foreachloop                     { printf("\nBlock : For Each Loop"); }
-    | whileloop                       { printf("\nBlock : While Loop"); }
-    | doWhileloop                     { printf("\nBlock : Do While Loop"); }
-    | doUntilloop                     { printf("\nBlock : Do Until Loop"); }
-    | exit_statement                  { printf("\nStatement : Exit Statement"); }
-    | pvtpubdeclaration               { printf("\nStatement : Private/Public Declaration"); }
-    | pvtpubsubblock                  { printf("\nBlock : Private/Public Sub Procedure"); }
-    | pvtpubfunctionblock             { printf("\nBlock : Private/Public Function Procedure"); }
-    | pvtpubpropgetblock              { printf("\nBlock : Private/Public Property Get Procedure"); }
-    | pvtpubpropsetblock              { printf("\nBlock : Private/Public Property Set Procedure"); }
-    | pvtpubpropletblock              { printf("\nBlock : Private/Public Property Let Procedure"); }
+    /* | conditionalselectcase           { printf("\nBlock : Conditional Select-Case"); } */
+    /* | forloop                         { printf("\nBlock : For Loop"); } */
+    /* | foreachloop                     { printf("\nBlock : For Each Loop"); } */
+    /* | whileloop                       { printf("\nBlock : While Loop"); } */
+    /* | doWhileloop                     { printf("\nBlock : Do While Loop"); } */
+    /* | doUntilloop                     { printf("\nBlock : Do Until Loop"); } */
+    /* | exit_statement                  { printf("\nStatement : Exit Statement"); } */
+    /* | pvtpubdeclaration               { printf("\nStatement : Private/Public Declaration"); } */
+    /* | pvtpubsubblock                  { printf("\nBlock : Private/Public Sub Procedure"); } */
+    /* | pvtpubfunctionblock             { printf("\nBlock : Private/Public Function Procedure"); } */
+    /* | pvtpubpropgetblock              { printf("\nBlock : Private/Public Property Get Procedure"); } */
+    /* | pvtpubpropsetblock              { printf("\nBlock : Private/Public Property Set Procedure"); } */
+    /* | pvtpubpropletblock              { printf("\nBlock : Private/Public Property Let Procedure"); } */
     | COMMENT                         { printf("\nStatement : Comment"); }
-/*
-vartype : T_AS { add('K'); } DATATYPE		{ insert_type(); }
-	| T_AS { add('K'); } IDENTIFIER		{ insert_type(); }	
-    | /* empty 
-
-declare : IDENTIFIER { add('V'); } vartype 		{$1.nd = mknode(NULL, NULL, $1.name); $$ = mknode($1.nd, $3.nd, "declaration"); }
-    | declare ',' IDENTIFIER vartype 			{$3.nd = mknode(NULL, NULL, $3.name); $$ = mknode($1.nd, $3.nd, "declaration"); }
-    | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype {$1.nd = mknode(NULL, NULL, $1.name); $3.nd = mknode(NULL, NULL, "NUMERIC_LITERAL"); $5.nd = mknode(NULL, NULL, "NUMERIC_LITERAL"); $$ = mknode($1.nd, $5.nd, "declaration");}
-
-declaration : T_DIM { add('K'); } declare {$$.nd = $2.nd;}
-
-redeclaration : T_REDIM { add('K'); } declare {$$.nd = $2.nd;}
-*/
 
 vartype : T_AS  DATATYPE		
 	| T_AS IDENTIFIER			
@@ -135,49 +123,52 @@ vartype : T_AS  DATATYPE
 
 declare : IDENTIFIER vartype 		
     | declare ',' IDENTIFIER vartype 			
-    | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype 
-    
-value : IDENTIFIER { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
-    | STRING_LITERAL { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
-    | NUMERIC_LITERAL { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
-    | FLOAT_LITERAL { add('C'); $$.nd = mknode(NULL, NULL, "FLOATING_NUMBER"); }
+    | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype   
 
-numbers : IDENTIFIER { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
-    | NUMERIC_LITERAL { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
-    | FLOAT_LITERAL { add('C'); $$.nd = mknode(NULL, NULL, "FLOATING_NUMBER"); }
-    
+declaration : T_DIM declare
 
-expression : expression T_PLUS expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_MINUS expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_MULTIPLY expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_DIVIDE expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_BACKSLASH expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_MOD expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_POWER expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_CONCATENATE expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_EQUAL expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_NOT_EQUAL expression  { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_LESS_EQUAL expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_GREATER_EQUAL expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_LESS_THAN expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_GREATER_THAN expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_IS expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_LIKE expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_NOT expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_AND expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_OR expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_XOR expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_EQV expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_IMP expression { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | '(' expression ')' { $$.nd = $2.nd; }
-    | value { $$.nd = $1.nd; }
-    | objectblock
+redeclaration : T_REDIM declare 
+
+value : IDENTIFIER         { add('V'); $$.nd = mknode(NULL, NULL, $1.name); }
+    | STRING_LITERAL       { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
+    | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
+    | FLOAT_LITERAL        { add('C'); $$.nd = mknode(NULL, NULL, "FLOATING_NUMBER"); }
+/*
+numbers : IDENTIFIER       { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
+    | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
+    | FLOAT_LITERAL        { add('C'); $$.nd = mknode(NULL, NULL, "FLOATING_NUMBER"); }
+*/
+expression : expression T_PLUS expression               { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_MINUS expression                     { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_MULTIPLY expression                  { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_DIVIDE expression                    { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_BACKSLASH expression                 { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_MOD expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_POWER expression                     { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_CONCATENATE expression               { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_EQUAL expression                     { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_NOT_EQUAL expression                 { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_LESS_EQUAL expression                { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_GREATER_EQUAL expression             { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_LESS_THAN expression                 { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_GREATER_THAN expression              { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_IS expression                        { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_LIKE expression                      { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_NOT expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_AND expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_OR expression                        { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_XOR expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_EQV expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | expression T_IMP expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
+    | '(' expression ')'                                { $$.nd = $2.nd; }
+    | value                                             { $$.nd = $1.nd; }
+    /* | objectblock */
 
 assignment : IDENTIFIER T_EQUAL expression { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $3.nd, "="); }
-	| objectblock T_EQUAL expression   
-    | T_SET assignment {$$.nd = $2.nd;}
-    | T_LET assignment {$$.nd = $2.nd;}
-
+	/* | objectblock T_EQUAL expression    */
+    | T_SET assignment                     { $$.nd = $2.nd; }
+    | T_LET assignment                     { $$.nd = $2.nd; }
+/*
 objectblock : object 
 
 object : object '.' obj 
@@ -193,15 +184,15 @@ obj : IDENTIFIER '(' valuecomma ')'
 
 valuecomma : value
     | valuecomma ',' value
-
+*/
 printvalues : T_CONCATENATE value printvalues 
     | T_CONCATENATE value 
 
 printing : T_MSG_BOX STRING_LITERAL 
     | T_MSG_BOX STRING_LITERAL printvalues 
-
+/*
 paramdeclare : declare 
-    | /* empty */
+    | // empty 
 
 subblock : T_SUB IDENTIFIER '(' paramdeclare ')' statements T_END T_SUB
     
@@ -230,40 +221,40 @@ type_dec_value : IDENTIFIER
 
 withblock : T_WITH IDENTIFIER statements T_END_WITH 
     | T_WITH objectblock statements T_END_WITH 
-
+*/
 conditionalifelse : ifblock elseifs elseblock T_END_IF {
-    /* Actions for handling the IF-ELSE statement */
-    if ($2.nd == NULL && $3.nd == NULL) {
-        /* Only IF block */
-        $$.nd = $1.nd;
-    } else if ($2.nd != NULL && $3.nd == NULL) {
-        /* IF-ELSEIF blocks only */
-        $$.nd = mknode($1.nd, $2.nd, "if-elseif");
-    } else if ($2.nd != NULL && $3.nd != NULL) {
-        /* IF-ELSEIF-ELSE blocks */
-        $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif"), $3.nd, "if-elseif-else");
-    }
-} 
+        /* Actions for handling the IF-ELSE statement */
+        if ($2.nd == NULL && $3.nd == NULL) {
+            /* Only IF block */
+            $$.nd = $1.nd;
+        } else if ($2.nd != NULL && $3.nd == NULL) {
+            /* IF-ELSEIF blocks only */
+            $$.nd = mknode($1.nd, $2.nd, "if-elseif");
+        } else if ($2.nd != NULL && $3.nd != NULL) {
+            /* IF-ELSEIF-ELSE blocks */
+            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif"), $3.nd, "if-elseif-else");
+        }
+    } 
 
-ifblock : T_IF { add('K'); } expression T_THEN { add('K'); } statements 
+ifblock : T_IF expression T_THEN statements 
 
 elseifs : elseifs elseifblock 
     | /* empty */
 
-elseifblock : T_ELSE_IF { add('K'); } expression T_THEN { add('K'); } statements 
+elseifblock : T_ELSE_IF expression T_THEN statements 
 
-elseblock : T_ELSE { add('K'); } statements
+elseblock : T_ELSE statements
     | /* empty */
-
+/*
 conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT 
 
 cases : cases caseblock 
-    | /* empty */
+    | // empty 
 
 caseblock : T_CASE caseexprs statements
 
 elsecase : T_CASE_ELSE statements
-    | /* empty */
+    | // empty 
 
 caseexprs : caseexprs ',' caseexpr
     | caseexpr
@@ -284,7 +275,7 @@ forloop : T_FOR assignment T_TO numbers stepping statements T_NEXT IDENTIFIER
 foreachloop : T_FOR_EACH IDENTIFIER T_IN IDENTIFIER statements T_NEXT IDENTIFIER 
 
 stepping : T_STEP numbers 
-    | /* empty */
+    | // empty
 
 whileloop : T_WHILE expression statements T_WEND 
 	
@@ -314,11 +305,11 @@ pvtpubpropgetblock : pvtpub propertygetblock
 pvtpubpropletblock : pvtpub propertyletblock
 
 pvtpubpropsetblock : pvtpub propertysetblock
-
+*/
 
 %%
 
-  
+
 //driver code 
 void main (int argc, char** argv) {
     FILE *file; 	
@@ -347,69 +338,27 @@ void main (int argc, char** argv) {
 
     if (flag==0) printf("\n\nValid Source Code\n\n"); 
     else printf("\n\nInvalid Source Code\n\n");
-   printf("\n\n \t\t\t\t\t\t PHASE 1: LEXICAL ANALYSIS \n\n");
+
+    printf("\n\nPHASE 1: LEXICAL ANALYSIS --------------------\n\n");
+
 	printf("\nSYMBOL   DATATYPE   TYPE   LINE NUMBER \n");
 	printf("_______________________________________\n\n");
-	int i=0;
-	for(i=0; i<count; i++) {
-		printf("%s\t%s\t%s\t%d\t\n", symbolTable[i].id_name, symbolTable[i].data_type, symbolTable[i].type, symbolTable[i].line_no);
+	for (int i=0; i<count; i++) {
+		printf("%s\t\t %s\t\t %s\t\t %d\t\t\n", symbolTable[i].id_name, symbolTable[i].data_type, symbolTable[i].type, symbolTable[i].line_no);
 	}
-	for(i=0;i<count;i++){
+	for (int i=0;i<count;i++){
 		free(symbolTable[i].id_name);
 		free(symbolTable[i].type);
 	}
-	printf("\n\n");
-	printf("\t\t\t\t\t\t PHASE 2: SYNTAX ANALYSIS \n\n");
+
+	printf("\n\nPHASE 2: SYNTAX ANALYSIS --------------------\n\n");
 	printtree(head); 
 	printf("\n\n");
+
+    return;
 }
 
-int search(char *type) {
-	int i;
-	for(i=count-1; i>=0; i--) {
-		if(strcmp(symbolTable[i].id_name, type)==0) {
-			return -1;
-			break;
-		}
-	}
-	return 0;
-}
-
-void add(char c) {
-    q=search(yytext);
-	if(q==0) {
-		if(c=='H') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup(type);
-			symbolTable[count].line_no=countn;
-			symbolTable[count].type=strdup("Header");
-			count++;
-		}
-		else if(c=='K') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup("N/A");
-			symbolTable[count].line_no=countn;
-			symbolTable[count].type=strdup("Keyword\t");
-			count++;
-		}
-		else if(c=='V') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup(type);
-			symbolTable[count].line_no=countn;
-			symbolTable[count].type=strdup("Variable");
-			count++;
-		}
-		else if(c=='C') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup("CONST");
-			symbolTable[count].line_no=countn;
-			symbolTable[count].type=strdup("Constant");
-			count++;
-		}
-    }
-}
-
-struct node* mknode(struct node *left, struct node *right, char *token) {	
+struct node* mknode (struct node *left, struct node *right, char *token) {	
 	struct node *newnode = (struct node *)malloc(sizeof(struct node));
 	char *newstr = (char *)malloc(strlen(token)+1);
 	strcpy(newstr, token);
@@ -419,13 +368,13 @@ struct node* mknode(struct node *left, struct node *right, char *token) {
 	return(newnode);
 }
 
-void printtree(struct node* tree) {
+void printtree (struct node* tree) {
 	printf("\n\n Inorder traversal of the Parse Tree: \n\n");
 	printInorder(tree);
 	printf("\n\n");
 }
 
-void printInorder(struct node *tree) {
+void printInorder (struct node *tree) {
 	int i;
 	if (tree->left) {
 		printInorder(tree->left);
@@ -436,15 +385,45 @@ void printInorder(struct node *tree) {
 	}
 }
 
+void add (char c) {
+    q=search(yytext);
+	if (q==0) {
+		if(c=='V') {
+			symbolTable[count].id_name=strdup(yytext);
+			symbolTable[count].data_type=strdup(type);
+			symbolTable[count].line_no=yylineno;
+			symbolTable[count].type=strdup("Variable");
+			count++;
+		}
+		else if(c=='C') {
+			symbolTable[count].id_name=strdup(yytext);
+			symbolTable[count].data_type=strdup("CONST");
+			symbolTable[count].line_no=yylineno;
+			symbolTable[count].type=strdup("Constant");
+			count++;
+		}
+    }
+}
+
 void insert_type() {
 	strcpy(type, yytext);
 }
 
-void insert_type_new(char *text) {
+void insert_type_new (char *text) {
 	strcpy(type, text);
 }
-  
-void yyerror(char *s) { 
-   printf("\n\nSyntax Error : Line %d >> %s\n\n", yylineno, yytext); 
-   flag=1; 
+
+int search (char *type) {
+	for (int i=count-1; i>=0; i--) {
+		if (strcmp(symbolTable[i].id_name, type)==0) {
+			return -1;
+			break;
+		}
+	}
+	return 0;
+}
+
+void yyerror (char *s) { 
+    printf("\n\nSyntax Error : Line %d >> %s\n\n", yylineno, yytext); 
+    flag=1; 
 } 

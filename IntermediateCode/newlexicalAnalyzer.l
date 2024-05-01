@@ -154,10 +154,10 @@ Application|Workbooks|Worksheets|Range|Cell|Chart|ChartObject|Shape|ShapeRange|T
 "Imp"  { yylval.nd_obj.name = strdup(yytext); return T_IMP; }
 
     /* REGEX for NUMERIC LITERAL */
-[+-]?[0-9]+[.]|[+-]?[0-9]+                         { yylval.numval = atoi(yytext); return NUMERIC_LITERAL; }
+[+-]?[0-9]+[.]|[+-]?[0-9]+                         { yylval.nd_obj.name = strdup(yytext); return NUMERIC_LITERAL; }
 
     /* REGEX for FLOAT LITERAL */
-[+-]?[0-9]*[.][0-9]+                          	   { yylval.fltval = atof(yytext); return FLOAT_LITERAL; }
+[+-]?[0-9]*[.][0-9]+                          	   { yylval.nd_obj.name = strdup(yytext); return FLOAT_LITERAL; }
 
     /* REGEX for IDENTIFIERS */
 [a-zA-Z][a-zA-Z0-9_]*                              { yylval.nd_obj.name = strdup(yytext); return IDENTIFIER; }
