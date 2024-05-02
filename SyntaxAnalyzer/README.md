@@ -117,7 +117,7 @@ gcc lex.yy.c y.tab.c
     5. Property Let Procedure
     6. Type Procedure
     7. With Procedure
-    8. Conditional If-ElseIf-Then
+    8. Conditional If-ElseIf-Else
     9. Conditional Select-Case
     10. For Loop
     11. For Each Loop
