@@ -64,6 +64,10 @@ gcc lex.yy.c y.tab.c
 <br>
 
 3. Semantic Analysis and Intermediate Code Generation <br>
+- We are generating the following for the input files
+    1. Symbol Table
+    2. Syntax Tree
+    3. Intermediate Code
 - Run semantic analyzer and intermediate code generator on an input_file -
 ```
 lex lexicalAnalyzer.l
