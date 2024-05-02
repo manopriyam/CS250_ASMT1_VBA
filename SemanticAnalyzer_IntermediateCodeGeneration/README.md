@@ -85,7 +85,7 @@ gcc lex.yy.c y.tab.c
     4. Printing
     5. Comment
 - Blocks Considered :
-    1. Conditional If-ElseIf-Then
+    1. Conditional If-ElseIf-Else
 
 <br>
 <br>
