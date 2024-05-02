@@ -40,7 +40,9 @@
     int ic_idx = 0;
     int temp_var = 0; 
     int label=0;
-    char icg[50][100];
+    
+	int isIf=0;
+    char icg[100][100];
 %}
 
 
@@ -53,8 +55,8 @@
 	struct var_name3 {
         char name[100];
         struct node* nd;
-        char if_body[5];
-        char else_body[5];  
+        char if_body[10];
+        char else_body[10];  
 	} nd_obj3;
 }; 
 
@@ -220,89 +222,313 @@ expression : expression T_PLUS expression {
         temp_var++;
         sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
     } 
-    | expression T_EQUAL expression { 
+    | expression T_EQUAL expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
     }
-    | expression T_NOT_EQUAL expression { 
-        $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
     }
-    | expression T_LESS_EQUAL expression { 
+    | expression T_NOT_EQUAL expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name); 
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
     }
-    | expression T_GREATER_EQUAL expression { 
-        $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
     }
-    | expression T_LESS_THAN expression { 
+    | expression T_LESS_EQUAL expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
     }
-    | expression T_GREATER_THAN expression { 
-        $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
     }
-    | expression T_IS expression { 
+    | expression T_GREATER_EQUAL expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
     }
-    | expression T_LIKE expression { 
-        $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
     }
-    | expression T_NOT expression   { 
+    | expression T_LESS_THAN expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
     }
-    | expression T_AND expression { 
-        $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
     }
-    | expression T_OR expression { 
+    | expression T_GREATER_THAN expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
     }
-    | expression T_XOR expression  { 
-        $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
     }
-    | expression T_EQV expression   { 
+    | expression T_IS expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
     }
-    | expression T_IMP expression  { 
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
+    }
+    | expression T_LIKE expression {  
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
-        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
+    }
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
+    }
+    | expression T_NOT expression   {  
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
+    }
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
+    }
+    | expression T_AND expression {  
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
+    }
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
+    }
+    | expression T_OR expression {  
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
+    }
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
+    }
+    | expression T_XOR expression  {  
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
+    }
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
+    }
+    | expression T_EQV expression   {  
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
+    }
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
+    }
+    | expression T_IMP expression  {  
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        
+        if(isIf==0){
+			sprintf(icg[ic_idx++], "\tif %s %s %s goto label%d\n", $1.name, $2.name, $3.name, label);
+			sprintf(icg[ic_idx++], "\tt%d = 0\n", temp_var);
+			
+			sprintf($$.name, "t%d", temp_var);
+			
+			sprintf(icg[ic_idx++], "\tgoto label%d\n", label+1);
+			
+			sprintf(icg[ic_idx++], "label%d:\n\tt%d = 1\n",label, temp_var++);
+			
+			sprintf(icg[ic_idx++], "label%d: \n", label+1);
+			label+=2;
+    }
+    else{
+			sprintf($$.name, "%s %s %s", $1.name, $2.name, $3.name);
+			sprintf($$.if_body, "%d", label++);
+			sprintf($$.else_body, "%d", label++);
+		}
     }
     | '(' expression ')'                                { $$.nd = $2.nd; strcpy($$.name, $2.name);}
     | value                                             { $$.nd = $1.nd; strcpy($$.name, $1.name);}
@@ -311,8 +537,6 @@ expression : expression T_PLUS expression {
 assignment : IDENTIFIER T_EQUAL expression { 
         $1.nd = mknode(NULL, NULL, $1.name); 
         $$.nd = mknode($1.nd, $3.nd, $2.name); 
-        sprintf($$.name, "t%d", temp_var);
-        temp_var++;
         sprintf(icg[ic_idx++], "%s = %s\n",  $$.name, $3.name);
     }
 	/* | objectblock T_EQUAL expression    */
@@ -382,24 +606,42 @@ type_dec_value : IDENTIFIER
 withblock : T_WITH IDENTIFIER statements T_END_WITH 
     | T_WITH objectblock statements T_END_WITH 
 */
-conditionalifelse : ifblock elseifs elseblock T_END_IF {
-        if ($2.nd == NULL && $3.nd == NULL) {
-            $$.nd = $1.nd;
-        } else if ($2.nd != NULL && $3.nd == NULL) {
-            $$.nd = mknode($1.nd, $2.nd, "if-elseif");
-        } else if ($2.nd != NULL && $3.nd != NULL) {
-            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif2"), $3.nd, "if-elseif-else");
+
+
+conditionalifelse : {isIf=1;} ifblock elseifs elseblock T_END_IF {
+
+        /* Actions for handling the IF-ELSE statement */
+        if ($3.nd == NULL && $4.nd == NULL) {
+            	$$.nd = $2.nd;
+		//sprintf(icg[ic_idx++], "\nLABEL %s:\n", $4.if_body);
+        } else if ($3.nd != NULL && $4.nd == NULL) {
+            /* IF-ELSEIF blocks only */
+            $$.nd = mknode($2.nd, $3.nd, "if-elseif");
+           
+        } else if ($3.nd != NULL && $4.nd != NULL) {
+            /* IF-ELSEIF-ELSE blocks */
+            $$.nd = mknode(mknode($2.nd, $3.nd, "if-elseif2"), $4.nd, "if-elseif-else");
         }
-        else if ($2.nd == NULL && $3.nd != NULL) {
-            $$.nd = mknode($1.nd, $3.nd, "if-else");
+        else if ($3.nd == NULL && $4.nd != NULL) {
+            /* IF-ELSE blocks */
+            $$.nd = mknode($2.nd, $4.nd, "if-else");
         }
+        
+        isIf=0;
     }
 
-ifblock : T_IF expression T_THEN statements {
-        $$.nd = mknode($2.nd, $4.nd, "if-block");
-        // sprintf(icg[ic_idx++], "\nif (%s %s %s) GOTO L%d else GOTO L%d\n", $1.name, $2.name, $3.name, label, label+1);
-        // sprintf($$.if_body, "L%d", label++);  
-        // sprintf($$.else_body, "L%d", label++);
+ifblock : T_IF expression
+	{
+	sprintf(icg[ic_idx++], "\tif %s goto label%s\n\tgoto label%s\n", $2.name, $2.if_body, $2.else_body);
+	sprintf(icg[ic_idx++],"label%s:\n", $2.if_body);
+	}
+	
+	T_THEN statements {
+	sprintf(icg[ic_idx++],"label%s:\n", $2.else_body);
+	}
+	
+		{
+        $$.nd = mknode($2.nd, $5.nd, "if-block");
     }
 
 elseifs : elseifs elseifblock {
@@ -412,14 +654,18 @@ elseifs : elseifs elseifblock {
     }
     | /* empty */ { $$.nd = NULL; }
 
-elseifblock : T_ELSE_IF expression T_THEN statements {
-        $$.nd = mknode($2.nd, $4.nd, "else-if-block");
-    }
+elseifblock : T_ELSE_IF expression {
+	sprintf(icg[ic_idx++], "\tif %s goto label%s\n\tgoto label%s\n", $2.name, $2.if_body, $2.else_body);
+	sprintf(icg[ic_idx++],"label%s:\n", $2.if_body);}
+	T_THEN statements {
+	sprintf(icg[ic_idx++],"label%s:\n", $2.else_body);
+	}
 
 elseblock : T_ELSE statements {
         $$.nd = mknode($2.nd, NULL, "else-block");
     }
     | /* empty */ { $$.nd = NULL; }
+ 
 /*
 conditionalselectcase : T_SELECT_CASE IDENTIFIER cases elsecase T_END_SELECT 
 
@@ -517,7 +763,7 @@ void main (int argc, char** argv) {
 
     printf("\n\nSYMBOL TABLE :\n\n");
 	printf("\n%20s\t %10s\t %10s\t %15s\t\n", "SYMBOL", "DATATYPE", "TYPE", "LINE_NUMBER");
-	printf("_____________________________________________________________________________________\n\n");
+	printf("_____________________________\n\n");
 	for (int i=0; i<count; i++) {
 		printf("%20s\t %10s\t %10s\t %15d\t\n", 
             symbolTable[i].id_name, 
@@ -604,4 +850,4 @@ int search (char *type) {
 void yyerror (char *s) { 
     printf("\n\nSyntax Error : Line %d >> %s\n\n", yylineno, yytext); 
     flag=1; 
-} 
+}
