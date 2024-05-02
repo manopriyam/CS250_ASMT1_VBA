@@ -1,4 +1,3 @@
-
 If i Mod 2 = 0 Then
     ' If i is even, add it to the result
     result = result + i

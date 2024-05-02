@@ -1,4 +1,4 @@
-# CS251_ASMT2_VBA
+# CS251_ASMT3_VBA
 
 CS251 Introduction to Language Processing <br>
 2023-24-W Semester <br>
@@ -52,84 +52,41 @@ gcc lex.yy.c
 <br>
 
 2. Syntax Analysis <br>
-- Install yacc (syntax analyzer) -
+- Refer to SyntaxAnalyzer folder
+- You may check the corresponding Syntax Analysis done on the tokens by running the following commands on the input_file -
 ```
-sudo apt-get install bison
+lex onlylexicalAnalyzer2.l
+yacc -d onlysyntaxAnalyzer.y
+gcc lex.yy.c y.tab.c
+./a.out input_file
 ```
-- Run syntax analyzer on an input_file -
+
+<br>
+
+3. Semantic Analysis and Intermediate Code Generation <br>
+- Run semantic analyzer and intermediate code generator on an input_file -
 ```
 lex lexicalAnalyzer.l
 yacc -d syntaxAnalyzer.y
 gcc lex.yy.c y.tab.c
 ./a.out input_file
 ```
-- The repository contains a few dummy VBA files which can be executed as follows - 
+- The repository contains a few dummy VBA files which can be executed as follows -
 ```
 lex lexicalAnalyzer.l
 yacc -d syntaxAnalyzer.y
 gcc lex.yy.c y.tab.c
 ./a.out VBAtrial.bas
 ```
-- We have taken a few assumptions :
-    - Expressions : There is whitespace between any LITERAL and OPERATOR <br>
-        - Assumed Syntax -
-        ```
-        result = (2 + (3 * (4 - 1))) / (5 + (5 * (2 - 1)))
-        ```
-    - Expressions : only first brackets '(' and ')' are used, if any. <br>
-        - Assumed Syntax -
-        ```
-        result = (2 + (3 * (4 - 1))) / (5 + (5 * (2 - 1)))
-        ```
-    - Conditional Statements : always have an 'End If' KEYWORD <br>
-        - Assumed Syntax -
-        ```
-        If performance = 1 Then Bonus = salary * 0.1 End If 
-        ```
-    - For Loop : always has identifier specified after 'Next' KEYWORD <br>
-        - Assumed Syntax -
-        ```
-        For i = 1 To 5 Step 5   
-            Dim x As Integer
-            z = 1 
-        Next i
-        ```
-    - With Block : always has the object properties explicitly specified <br>
-        - Assumed Syntax -
-        ```
-        With MyLabel 
-            MyLabel.Height = 2000 
-        End With
-        ```
-- Statements Considered :
+- Statements Considered -
     1. Declarations
     2. Re-Declarations
     3. Assignment
     4. Printing
-    5. Exit Statements
-    6. Private/Public Declarations
-    7. Comment
+    5. Comment
 - Blocks Considered :
-    1. Sub Procedure
-    2. Function Procedure
-    3. Property Get Procedure
-    4. Property Set Procedure
-    5. Property Let Procedure
-    6. Type Procedure
-    7. With Procedure
-    8. Conditional If-ElseIf-Then
-    9. Conditional Select-Case
-    10. For Loop
-    11. For Each Loop
-    12. While Loop
-    13. Do While Loop
-    14. Do Until Loop
-    15. Private/Public Sub Procedure
-    16. Private/Public Function Procedure
-    17. Private/Public Property Get Procedure
-    18. Private/Public Property Set Procedure
-    19. Private/Public Property Let Procedure
-    
+    1. Conditional If-ElseIf-Then
+
 <br>
 <br>
 

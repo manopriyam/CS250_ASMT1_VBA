@@ -37,10 +37,9 @@
     void insert_type();
     int search(char *);
 
-    int ic_idx=0;
-    int temp_var=0; 
-	int label=0; 
-	int is_for=0;
+    int ic_idx = 0;
+    int temp_var = 0; 
+    int label=0;
     char icg[50][100];
 %}
 
@@ -398,6 +397,9 @@ conditionalifelse : ifblock elseifs elseblock T_END_IF {
 
 ifblock : T_IF expression T_THEN statements {
         $$.nd = mknode($2.nd, $4.nd, "if-block");
+        // sprintf(icg[ic_idx++], "\nif (%s %s %s) GOTO L%d else GOTO L%d\n", $1.name, $2.name, $3.name, label, label+1);
+        // sprintf($$.if_body, "L%d", label++);  
+        // sprintf($$.else_body, "L%d", label++);
     }
 
 elseifs : elseifs elseifblock {
@@ -505,6 +507,7 @@ void main (int argc, char** argv) {
     }
     fclose(file);
     
+    printf("\n\nSYNTAX ANALYSIS :\n\n");
     file = fopen(argv[1], "r"); // open the file given as argument
     yyin=file;  // Make file content input for lexical analysis, i.e, sets input file as file
     yyparse(); // function to call parser
@@ -512,23 +515,27 @@ void main (int argc, char** argv) {
     if (flag==0) printf("\n\nValid Source Code\n\n"); 
     else printf("\n\nInvalid Source Code\n\n");
 
-    printf("\n\nPHASE 1: LEXICAL ANALYSIS --------------------\n\n");
-
-	printf("\n    SYMBOL         DATATYPE          TYPE          LINE NUMBER     \n");
-	printf("______________________________________________________________________\n\n");
+    printf("\n\nSYMBOL TABLE :\n\n");
+	printf("\n%20s\t %10s\t %10s\t %15s\t\n", "SYMBOL", "DATATYPE", "TYPE", "LINE_NUMBER");
+	printf("_____________________________________________________________________________________\n\n");
 	for (int i=0; i<count; i++) {
-		printf("%10s\t %10s\t %10s\t %10d\t\n", symbolTable[i].id_name, symbolTable[i].data_type, symbolTable[i].type, symbolTable[i].line_no);
+		printf("%20s\t %10s\t %10s\t %15d\t\n", 
+            symbolTable[i].id_name, 
+            symbolTable[i].data_type, 
+            symbolTable[i].type, 
+            symbolTable[i].line_no);
 	}
-	for (int i=0;i<count;i++){
+	for (int i=0; i<count; i++) {
 		free(symbolTable[i].id_name);
 		free(symbolTable[i].type);
 	}
+    printf("\n\n");
 
-	printf("\n\nPHASE 2: SYNTAX ANALYSIS --------------------\n\n");
+	printf("\n\nSYNTAX TREE :\n\n");
 	printtree(head); 
 	printf("\n\n");
 	
-	printf("\n\nPHASE 4: INTERMEDIATE CODE GENERATION \n\n");
+	printf("\n\nINTERMEDIATE CODE GENERATION :\n\n");
 	for(int i=0; i<ic_idx; i++){
 		printf("%s", icg[i]);
 	}
@@ -541,14 +548,14 @@ struct node* mknode (struct node *left, struct node *right, char *token) {
 	struct node *newnode = (struct node*)malloc(sizeof(struct node));
 	char *newstr = (char*)malloc(strlen(token)+1);
 	strcpy(newstr, token);
-	newnode->left = left;
+	newnode->left = left; 
 	newnode->right = right;
 	newnode->token = newstr;
 	return(newnode);
 }
 
 void printtree (struct node* tree) {
-	printf("\n\nInorder traversal of the Parse Tree: \n\n");
+	printf("Inorder Traversal of the Syntax Tree or Parse Tree: \n\n");
 	printInorder(tree);
 	printf("\n\n");
 }
@@ -565,20 +572,20 @@ void printInorder (struct node *tree) {
 
 void add (char c, char *t) {
     q = search(yytext);
-		if (q==-1 && c=='V') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup(type);
-			symbolTable[count].line_no=yylineno;
-			symbolTable[count].type=strdup("Variable");
-			count++;
-		}
-		else if (c=='C') {
-			symbolTable[count].id_name=strdup(yytext);
-			symbolTable[count].data_type=strdup(t);
-			symbolTable[count].line_no=yylineno;
-			symbolTable[count].type=strdup("Constant");
-			count++;
-		}
+    if (q==-1 && c=='V') {
+        symbolTable[count].id_name=strdup(yytext);
+        symbolTable[count].data_type=strdup(type);
+        symbolTable[count].line_no=yylineno;
+        symbolTable[count].type=strdup("Variable");
+        count++;
+    }
+    else if (c=='C') {
+        symbolTable[count].id_name=strdup(yytext);
+        symbolTable[count].data_type=strdup(t);
+        symbolTable[count].line_no=yylineno;
+        symbolTable[count].type=strdup("Constant");
+        count++;
+    }
 }
 
 void insert_type() {
