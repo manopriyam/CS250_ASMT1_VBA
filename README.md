@@ -30,6 +30,7 @@ Visit the Corresponding Folders for each of the following.
 The corresponding README files are present in the respective folder itself.
 1. Lexical Analysis - Assignment 1 <br>
 2. Syntax Analysis - Assignment 2 <br>
+3. Semantic Analysis and Intermediate Code Generation - Assignment 3 <br>
 
 <br>
 <br>
