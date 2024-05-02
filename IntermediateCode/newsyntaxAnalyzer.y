@@ -12,15 +12,14 @@
     int count=0;
     int q;
     char type[20];
-    // extern int countn;
 
     struct node { 
         struct node *left; 
         struct node *right; 
         char *token; 
-    }; // struct node for each node of the parse tree for the grammar
+    }; 
 
-    struct node* mknode (struct node *left, struct node *right, char *token); // function to create node
+    struct node* mknode (struct node *left, struct node *right, char *token); 
 
     void printtree(struct node*); 
     void printInorder(struct node *); 
@@ -37,6 +36,12 @@
     void add(char, char *);
     void insert_type();
     int search(char *);
+
+    int ic_idx=0;
+    int temp_var=0; 
+	int label=0; 
+	int is_for=0;
+    char icg[50][100];
 %}
 
 
@@ -44,7 +49,14 @@
 	struct var_name { 
 		char* name; 
 		struct node* nd;
-	} nd_obj; // using nd_obj instead
+	} nd_obj; 
+	
+	struct var_name3 {
+        char name[100];
+        struct node* nd;
+        char if_body[5];
+        char else_body[5];  
+	} nd_obj3;
 }; 
 
 %start program
@@ -61,7 +73,9 @@
 %token <nd_obj> FLOAT_LITERAL 
 %token <nd_obj> IDENTIFIER PARENTHESIS SEPARATOR
 
-%type <nd_obj> program statements statement vartype declare declaration redeclaration value expression assignment printvalues printing conditionalifelse ifblock elseifs elseifblock elseblock
+%type <nd_obj> program statements statement vartype declare declaration redeclaration value assignment printvalues printing conditionalifelse ifblock elseifs elseifblock elseblock
+
+%type <nd_obj3> expression
 
 %left T_IMP T_EQV
 %left T_XOR
@@ -131,10 +145,12 @@ vartype : T_AS  DATATYPE {
 declare : IDENTIFIER vartype { 
         $1.nd = mknode(NULL, NULL, $1.name); 
         $$.nd = mknode($1.nd, $2.nd, "declareSingle"); 
+        //sprintf(icg[ic_idx++], "%s =", $1.name);
     }		
     | declare ',' IDENTIFIER vartype { 
         $3.nd = mknode(NULL, NULL, $3.name);
         $$.nd = mknode($1.nd, mknode($3.nd, $4.nd, "declareSingle"), "declareMultiple"); 
+        //sprintf(icg[ic_idx++], "%s =", $3.name);
     }
     /* | IDENTIFIER '(' NUMERIC_LITERAL T_TO NUMERIC_LITERAL ')' vartype   */
 
@@ -157,33 +173,149 @@ numbers : IDENTIFIER       { add('C'); $$.nd = mknode(NULL, NULL, $1.name); }
     | NUMERIC_LITERAL      { add('C'); $$.nd = mknode(NULL, NULL, "NUMBER"); }
     | FLOAT_LITERAL        { add('C'); $$.nd = mknode(NULL, NULL, "FLOATING_NUMBER"); }
 */
-expression : expression T_PLUS expression               { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_MINUS expression                     { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_MULTIPLY expression                  { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_DIVIDE expression                    { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_BACKSLASH expression                 { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_MOD expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_POWER expression                     { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_CONCATENATE expression               { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_EQUAL expression                     { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_NOT_EQUAL expression                 { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_LESS_EQUAL expression                { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_GREATER_EQUAL expression             { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_LESS_THAN expression                 { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_GREATER_THAN expression              { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_IS expression                        { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_LIKE expression                      { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_NOT expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_AND expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_OR expression                        { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_XOR expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_EQV expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | expression T_IMP expression                       { $$.nd = mknode($1.nd, $3.nd, $2.name); }
-    | '(' expression ')'                                { $$.nd = $2.nd; }
-    | value                                             { $$.nd = $1.nd; }
+expression : expression T_PLUS expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_MINUS expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_MULTIPLY expression  { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_DIVIDE expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_BACKSLASH expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_MOD expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_POWER expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_CONCATENATE expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    } 
+    | expression T_EQUAL expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_NOT_EQUAL expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_LESS_EQUAL expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name); 
+    }
+    | expression T_GREATER_EQUAL expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_LESS_THAN expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_GREATER_THAN expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_IS expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_LIKE expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_NOT expression   { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_AND expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_OR expression { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_XOR expression  { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_EQV expression   { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | expression T_IMP expression  { 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s %s %s\n",  $$.name, $1.name, $2.name, $3.name);
+    }
+    | '(' expression ')'                                { $$.nd = $2.nd; strcpy($$.name, $2.name);}
+    | value                                             { $$.nd = $1.nd; strcpy($$.name, $1.name);}
     /* | objectblock */
 
-assignment : IDENTIFIER T_EQUAL expression { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $3.nd, $2.name); }
+assignment : IDENTIFIER T_EQUAL expression { 
+        $1.nd = mknode(NULL, NULL, $1.name); 
+        $$.nd = mknode($1.nd, $3.nd, $2.name); 
+        sprintf($$.name, "t%d", temp_var);
+        temp_var++;
+        sprintf(icg[ic_idx++], "%s = %s\n",  $$.name, $3.name);
+    }
 	/* | objectblock T_EQUAL expression    */
     | T_SET assignment                     { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $2.nd, $1.name); }
     | T_LET assignment                     { $1.nd = mknode(NULL, NULL, $1.name); $$.nd = mknode($1.nd, $2.nd, $1.name); }
@@ -254,12 +386,10 @@ withblock : T_WITH IDENTIFIER statements T_END_WITH
 conditionalifelse : ifblock elseifs elseblock T_END_IF {
         if ($2.nd == NULL && $3.nd == NULL) {
             $$.nd = $1.nd;
-        } 
-        else if ($2.nd != NULL && $3.nd == NULL) {
+        } else if ($2.nd != NULL && $3.nd == NULL) {
             $$.nd = mknode($1.nd, $2.nd, "if-elseif");
-        } 
-        else if ($2.nd != NULL && $3.nd != NULL) {
-            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif"), $3.nd, "if-elseif-else");
+        } else if ($2.nd != NULL && $3.nd != NULL) {
+            $$.nd = mknode(mknode($1.nd, $2.nd, "if-elseif2"), $3.nd, "if-elseif-else");
         }
         else if ($2.nd == NULL && $3.nd != NULL) {
             $$.nd = mknode($1.nd, $3.nd, "if-else");
@@ -272,10 +402,10 @@ ifblock : T_IF expression T_THEN statements {
 
 elseifs : elseifs elseifblock {
         if ($1.nd != NULL) {
-            $$.nd = mknode($1.nd, $2.nd, "else-if-blocks-Multiple");
+            $$.nd = mknode($1.nd, $2.nd, "else-if-blocks");
         }
         else if ($1.nd == NULL) {  
-            $$.nd = mknode(NULL, $2.nd, "else-if-blocks-Single");
+            $$.nd = mknode(NULL, $2.nd, "else-if-blocks2");
         }
     }
     | /* empty */ { $$.nd = NULL; }
@@ -389,13 +519,19 @@ void main (int argc, char** argv) {
 	for (int i=0; i<count; i++) {
 		printf("%10s\t %10s\t %10s\t %10d\t\n", symbolTable[i].id_name, symbolTable[i].data_type, symbolTable[i].type, symbolTable[i].line_no);
 	}
-	for (int i=0; i<count; i++){
+	for (int i=0;i<count;i++){
 		free(symbolTable[i].id_name);
 		free(symbolTable[i].type);
 	}
 
 	printf("\n\nPHASE 2: SYNTAX ANALYSIS --------------------\n\n");
 	printtree(head); 
+	printf("\n\n");
+	
+	printf("\n\nPHASE 4: INTERMEDIATE CODE GENERATION \n\n");
+	for(int i=0; i<ic_idx; i++){
+		printf("%s", icg[i]);
+	}
 	printf("\n\n");
 
     return;
@@ -422,39 +558,38 @@ void printInorder (struct node *tree) {
 		printInorder(tree->left);
 	}
 	printf("%s, ", tree->token);
-    if (tree->right) {
+	if (tree->right) {
 		printInorder(tree->right);
 	}
 }
 
 void add (char c, char *t) {
     q = search(yytext);
-    if (q==-1 && c=='V') {
-        symbolTable[count].id_name=strdup(yytext);
-        symbolTable[count].data_type=strdup(type);
-        symbolTable[count].line_no=yylineno;
-        symbolTable[count].type=strdup("Variable");
-        count++;
-    }
-    else if (c=='C') {
-        symbolTable[count].id_name=strdup(yytext);
-        symbolTable[count].data_type=strdup(t);
-        symbolTable[count].line_no=yylineno;
-        symbolTable[count].type=strdup("Constant");
-        count++;
-    }
+		if (q==-1 && c=='V') {
+			symbolTable[count].id_name=strdup(yytext);
+			symbolTable[count].data_type=strdup(type);
+			symbolTable[count].line_no=yylineno;
+			symbolTable[count].type=strdup("Variable");
+			count++;
+		}
+		else if (c=='C') {
+			symbolTable[count].id_name=strdup(yytext);
+			symbolTable[count].data_type=strdup(t);
+			symbolTable[count].line_no=yylineno;
+			symbolTable[count].type=strdup("Constant");
+			count++;
+		}
 }
 
 void insert_type() {
 	strcpy(type, yytext);
 }
 
-int search (char *name) {
+int search (char *type) {
 	for (int i=count-1; i>=0; i--) {
-		if (strcmp(symbolTable[i].id_name, name)==0) {
+		if (strcmp(symbolTable[i].id_name, type)==0) {
 			return i;
-			break;
-		
+		}
 	}
 	return -1;
 }
